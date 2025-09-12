@@ -1,0 +1,86 @@
+name: E-commerce Backend Kanban
+description: Kanban board for managing development of the e-commerce backend system.
+public: false
+
+# Columns
+columns:
+  - name: Backlog
+    cards: []
+
+  - name: To Do
+    cards: []
+
+  - name: In Progress
+    cards: []
+
+  - name: In Review
+    cards: []
+
+  - name: Done
+    cards: []
+
+# Milestones (Sprints)
+milestones:
+  - title: Sprint 1 - Project Foundation & Authentication
+    description: Setup project infrastructure and implement JWT authentication.
+    due_date: 2025-09-26
+    cards:
+      - title: "Initialize Django project with modular structure"
+        labels: ["setup"]
+      - title: "Configure PostgreSQL database for dev, staging, and prod"
+        labels: ["setup", "database"]
+      - title: "Implement JWT authentication endpoints (/api/users/register/, /api/users/token/)"
+        labels: ["auth"]
+      - title: "Add protected endpoint (/api/users/me/)"
+        labels: ["auth"]
+      - title: "Setup Pytest and write tests for registration & login"
+        labels: ["testing", "auth"]
+      - title: "Setup CI workflow to run tests on push"
+        labels: ["devops", "testing"]
+
+  - title: Sprint 2 - Admin Catalog Management
+    description: Implement product & category models with admin-only CRUD.
+    due_date: 2025-10-10
+    cards:
+      - title: "Create Category and Product models with migrations"
+        labels: ["catalog", "database"]
+      - title: "Implement Admin CRUD for categories"
+        labels: ["catalog"]
+      - title: "Implement Admin CRUD for products"
+        labels: ["catalog"]
+      - title: "Add permissions: only is_staff=True can access admin APIs"
+        labels: ["auth", "catalog"]
+      - title: "Write tests for CRUD operations and permissions"
+        labels: ["testing", "catalog"]
+
+  - title: Sprint 3 - Public Product Discovery
+    description: Expose public-facing product APIs with filtering, sorting, search, and pagination.
+    due_date: 2025-10-24
+    cards:
+      - title: "Implement public product list (/api/products/)"
+        labels: ["discovery"]
+      - title: "Add filtering by category_id"
+        labels: ["discovery"]
+      - title: "Add sorting (price, name, date)"
+        labels: ["discovery"]
+      - title: "Add pagination for product list"
+        labels: ["discovery"]
+      - title: "Implement basic search (by name)"
+        labels: ["discovery"]
+      - title: "Expand tests for discovery features"
+        labels: ["testing", "discovery"]
+
+  - title: Sprint 4 - Documentation & CI/CD
+    description: Finalize project with API docs and automated CI/CD pipeline.
+    due_date: 2025-11-07
+    cards:
+      - title: "Integrate Swagger/OpenAPI for API docs"
+        labels: ["docs"]
+      - title: "Finalize Dockerfile & build CI workflow"
+        labels: ["devops"]
+      - title: "Configure CD pipeline for staging deployment"
+        labels: ["devops"]
+      - title: "Add manual trigger for production deployment"
+        labels: ["devops"]
+      - title: "Configure GitHub Secrets for environment variables"
+        labels: ["devops", "security"]
