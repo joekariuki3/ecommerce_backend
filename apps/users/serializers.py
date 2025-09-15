@@ -12,7 +12,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
                   "is_staff",
                   "last_login",
                   "is_active",
-                  "date_joined"]
+                  "date_joined",
+                  "password"
+                  ]
         read_only_fields = ('id', "last_login", "date_joined")
         required_fields = ( "first_name", "last_name", "username", "email", "password")
 
