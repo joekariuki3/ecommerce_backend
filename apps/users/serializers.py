@@ -28,3 +28,19 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             instance.is_staff = True
         user = User.objects.create_user(**validated_data)
         return user
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id",
+                  "username",
+                  "first_name",
+                  "last_name",
+                  "email",
+                  "is_staff",
+                  "last_login",
+                  "is_active",
+                  "date_joined",
+                  ]
+        read_only_fields = ('id', "last_login", "date_joined")
+        required_fields = ( "first_name", "last_name", "username", "email", "password")
