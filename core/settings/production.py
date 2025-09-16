@@ -1,6 +1,9 @@
 from .base import *
 import os
 
+print(f"ENV: Production Environment being used")
+
+
 DEBUG = os.getenv('DEBUG', False)
 
 DATABASES = {

@@ -1,6 +1,9 @@
 from .base import *
 import os
 
+print(f"ENV: Staging Environment being used")
+
+
 DEBUG = os.getenv('DEBUG')
 
 DATABASES = {
