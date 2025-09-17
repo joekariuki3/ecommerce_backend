@@ -3,7 +3,7 @@ import os
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", default=os.urandom(256).hex())
 
 hosts = os.getenv("ALLOWED_HOSTS")
 if hosts:
