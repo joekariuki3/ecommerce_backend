@@ -1,7 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
-from apps.catalog.models import Category
+from apps.catalog.models import Category, Product
 
 
 @pytest.fixture
@@ -91,3 +91,15 @@ def category_factory():
         return Category.objects.create(**kwargs)
 
     return create_category
+
+
+@pytest.fixture
+def product_factory():
+    """
+    A factory fixture to create Product instances with optional keyword arguments.
+    """
+
+    def create_product(**kwargs):
+        return Product.objects.create(**kwargs)
+
+    return create_product
