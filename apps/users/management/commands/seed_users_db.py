@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from apps.catalog.models import Category, Product
 
 class Command(BaseCommand):
     help = "Seed the database with sample users"
