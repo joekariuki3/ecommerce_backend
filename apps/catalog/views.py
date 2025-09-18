@@ -16,6 +16,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing product instances.
     Supports filtering by category ID.
+    Supports ordering by price, name, and creation date.
     """
 
     queryset = Product.objects.select_related("category").all()
@@ -24,3 +25,4 @@ class ProductViewSet(viewsets.ModelViewSet):
     filterset_fields = {
         "category__id": ["exact"],
     }
+    ordering_fields = ["price", "name", "created_at"]
