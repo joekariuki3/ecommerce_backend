@@ -9,13 +9,16 @@ class Command(BaseCommand):
         User = get_user_model()
         # Seed admin user
         admin_email = os.environ.get("ADMIN_EMAIL")
-        if not User.objects.filter(email=admin_email).exists():
-            User.objects.create_superuser(
-                email=admin_email,
-                username=os.environ.get("ADMIN_USERNAME"),
-                password=os.environ.get("ADMIN_PASSWORD"),
-            )
-            self.stdout.write(self.style.SUCCESS("Admin user created."))
+        if admin_email and admin_email.strip():
+            if not User.objects.filter(email=admin_email).exists():
+                User.objects.create_superuser(
+                    email=admin_email,
+                    username=os.environ.get("ADMIN_USERNAME"),
+                    password=os.environ.get("ADMIN_PASSWORD"),
+                )
+                self.stdout.write(self.style.SUCCESS("Admin user created."))
+        else:
+            self.stdout.write(self.style.WARNING("ADMIN_EMAIL not set. Skipping admin user creation."))
 
         # Seed sample users
         sample_users = [
@@ -29,8 +32,12 @@ class Command(BaseCommand):
              },
         ]
         for u in sample_users:
-            if not User.objects.filter(email=u["email"]).exists():
-                User.objects.create_user(**u)
+            if u["email"] and u["email"].strip():
+                if not User.objects.filter(email=u["email"]).exists():
+                    User.objects.create_user(**u)
+            else:
+                self.stdout.write(self.style.WARNING("One of the USER_EMAILs is not set. Skipping that user creation."))
+
         self.stdout.write(self.style.SUCCESS("Sample users created."))
 
         self.stdout.write(self.style.SUCCESS("Sample data seeded."))
