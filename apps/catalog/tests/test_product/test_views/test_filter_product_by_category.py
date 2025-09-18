@@ -16,8 +16,8 @@ class TestFilterProductByCategory:
         response = api_client.get(url, {"category__id": category1.id})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 2
-        returned_product_names = {product["name"] for product in response.data}
+        assert len(response.data['results']) == 2
+        returned_product_names = {product["name"] for product in response.data['results']}
         assert returned_product_names == {"Product 1", "Product 3"}
 
     def test_filter_products_by_nonexistent_category(self, api_client, product_factory, category_factory):
@@ -44,7 +44,7 @@ class TestFilterProductByCategory:
         response = api_client.get(url, {"category__id": category3.id})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 0
+        assert len(response.data['results']) == 0
 
     def test_filter_products_without_category_param(self, api_client, product_factory, category_factory):
         category1 = category_factory(name="Category 1")
@@ -56,6 +56,6 @@ class TestFilterProductByCategory:
         response = api_client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 2
-        returned_product_names = {product["name"] for product in response.data}
+        assert len(response.data['results']) == 2
+        returned_product_names = {product["name"] for product in response.data['results']}
         assert returned_product_names == {"Product 1", "Product 2"}

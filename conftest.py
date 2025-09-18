@@ -103,3 +103,43 @@ def product_factory():
         return Product.objects.create(**kwargs)
 
     return create_product
+
+@pytest.fixture
+def create_categories(category_factory):
+    """
+    A fixture to create multiple Category instances.
+    """
+
+    def make_categories(count, **kwargs):
+        categories = []
+        for i in range(count):
+            category_data = {
+                "name": f"Category {i+1}",
+                "description": f"Description for category {i+1}",
+            }
+            category_data.update(kwargs)
+            categories.append(category_factory(**category_data))
+        return categories
+
+    return make_categories
+
+@pytest.fixture
+def create_products(product_factory, create_categories):
+    """
+    A fixture to create multiple Product instances.
+    """
+
+    def make_products(count, **kwargs):
+        products = []
+        categories = create_categories(5)
+        for i in range(count):
+            product_data = {
+                "name": f"Product {i+1}",
+                "description": f"Description for product {i+1}",
+                "price": 10.0 + i,
+                "category": categories[i % len(categories)],  # Assign categories in a round-robin fashion
+            }
+            product_data.update(kwargs)
+            products.append(product_factory(**product_data))
+        return products
+    return make_products
