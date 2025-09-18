@@ -13,8 +13,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    """A viewset for viewing and editing product instances."""
+    """
+    A viewset for viewing and editing product instances.
+    Supports filtering by category ID.
+    """
 
     queryset = Product.objects.select_related("category").all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
+    filterset_fields = {
+        "category__id": ["exact"],
+    }
