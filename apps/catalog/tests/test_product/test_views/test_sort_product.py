@@ -15,8 +15,8 @@ class TestSortProductByName:
         response = api_client.get(url, {"ordering": "name"})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
-        returned_product_names = [product["name"] for product in response.data]
+        assert len(response.data['results']) == 3
+        returned_product_names = [product["name"] for product in response.data['results']]
         assert returned_product_names == ["Apple", "Banana", "Cherry"]
 
     def test_sort_products_by_name_descending(self, api_client, product_factory, category_factory):
@@ -29,8 +29,8 @@ class TestSortProductByName:
         response = api_client.get(url, {"ordering": "-name"})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
-        returned_product_names = [product["name"] for product in response.data]
+        assert len(response.data['results']) == 3
+        returned_product_names = [product["name"] for product in response.data['results']]
         assert returned_product_names == ["Cherry", "Banana", "Apple"]
 
     def test_sort_products_by_name_with_identical_names(self, api_client, product_factory, category_factory):
@@ -46,8 +46,8 @@ class TestSortProductByName:
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "name"})
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 7
-        returned_product_names = [product["name"] for product in response.data]
+        assert len(response.data['results']) == 7
+        returned_product_names = [product["name"] for product in response.data['results']]
         assert returned_product_names == ["Apple", "Apple", "Banana", "Banana", "Cherry", "Cherry", "Date"]
 
 @pytest.mark.django_db
@@ -62,8 +62,8 @@ class TestSortProductByPrice:
         response = api_client.get(url, {"ordering": "price"})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
-        returned_product_prices = [product["price"] for product in response.data]
+        assert len(response.data['results']) == 3
+        returned_product_prices = [product["price"] for product in response.data['results']]
         assert returned_product_prices == ['20.00', '30.00', '45.00']
 
     def test_sort_products_by_price_descending(self, api_client, product_factory, category_factory):
@@ -76,8 +76,8 @@ class TestSortProductByPrice:
         response = api_client.get(url, {"ordering": "-price"})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
-        returned_product_prices = [product["price"] for product in response.data]
+        assert len(response.data['results']) == 3
+        returned_product_prices = [product["price"] for product in response.data['results']]
         assert returned_product_prices == ['45.00', '30.00', '20.00']
 
     def test_sort_products_by_price_with_identical_prices(self, api_client, product_factory, category_factory):
@@ -92,8 +92,8 @@ class TestSortProductByPrice:
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "price"})
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 6
-        returned_product_prices = [product["price"] for product in response.data]
+        assert len(response.data['results']) == 6
+        returned_product_prices = [product["price"] for product in response.data['results']]
         assert returned_product_prices == ['20.00', '20.00', '30.00', '30.00', '45.00', '45.00']
 
 
@@ -109,8 +109,8 @@ class TestSortProductByCreatedAt:
         response = api_client.get(url, {"ordering": "created_at"})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
-        returned_product_names = [product["name"] for product in response.data]
+        assert len(response.data['results']) == 3
+        returned_product_names = [product["name"] for product in response.data['results']]
         assert returned_product_names == ["Product 1", "Product 2", "Product 3"]
 
     def test_sort_products_by_created_at_descending(self, api_client, product_factory, category_factory):
@@ -123,6 +123,6 @@ class TestSortProductByCreatedAt:
         response = api_client.get(url, {"ordering": "-created_at"})
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
-        returned_product_names = [product["name"] for product in response.data]
+        assert len(response.data['results']) == 3
+        returned_product_names = [product["name"] for product in response.data['results']]
         assert returned_product_names == ["Product 3", "Product 2", "Product 1"]

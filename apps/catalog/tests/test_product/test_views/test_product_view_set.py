@@ -100,8 +100,8 @@ class TestProductViewSet:
         url = reverse("catalog:product-list")
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 2
-        product_names = {product["name"] for product in response.data}
+        assert len(response.data['results']) == 2
+        product_names = {product["name"] for product in response.data['results']}
         assert "Product 1" in product_names
         assert "Product 2" in product_names
 
@@ -109,7 +109,7 @@ class TestProductViewSet:
         url = reverse("catalog:product-list")
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert response.data == []
+        assert response.data['results'] == []
 
     def test_retrieve_product(self, api_client, product_factory, category_factory):
         category = category_factory(name="Electronics")
