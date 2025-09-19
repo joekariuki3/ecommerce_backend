@@ -3,6 +3,11 @@ from .models import Category, Product
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """
+    Serializer for Category model.
+    Handles serialization and deserialization of Category instances.
+    Validates that the name field is provided and not empty.
+    """
     class Meta:
         model = Category
         fields = ["id", "name", "description"]
@@ -14,6 +19,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Product model.
+    Handles serialization and deserialization of Product instances.
+    Validates that name, price, stock_quantity, and category_id fields are provided.
+    Ensures price and stock_quantity are non-negative.
+    """
     category = CategorySerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source="category", write_only=True
