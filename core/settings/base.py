@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
-    'drf_yasg',
+    "drf_yasg",
 
     # local apps
     "apps.users",
@@ -101,11 +101,11 @@ SIMPLE_JWT = {
 # Swagger / drf-yasg settings
 SWAGGER_USE_COMPAT_RENDERERS = False
 SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header',
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
         }
     },
 }
