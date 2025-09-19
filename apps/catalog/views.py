@@ -17,7 +17,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing product instances.
-    Supports filtering by category, ordering by price, name, and creation date, and pagination.
+    Supports filtering by category, ordering by price, name, and creation date,
+    search by name and pagination.
     """
     queryset = Product.objects.select_related("category").order_by("id")
     serializer_class = ProductSerializer
