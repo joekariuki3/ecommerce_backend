@@ -3,6 +3,7 @@ from .serializers import CategorySerializer, ProductSerializer
 from .models import Category, Product
 from .permissions import IsAdminOrReadOnly
 from .paginations import ProductPagination
+from rest_framework import filters
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -23,6 +24,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
     pagination_class = ProductPagination
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
     filterset_fields = {
         "category__id": ["exact"],
     }
