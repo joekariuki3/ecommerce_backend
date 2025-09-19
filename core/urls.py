@@ -30,7 +30,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/users/", include(users_urls, namespace="users")),
     path("api/catalog/", include(catalog_urls, namespace="catalog")),
-    path("api/auth/login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/auth/login/", TokenObtainPairView.as_view(), name="login"),
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/auth/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("api/auth/logout/", LogoutView.as_view(), name="logout"),
