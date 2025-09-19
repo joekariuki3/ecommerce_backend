@@ -4,6 +4,7 @@ from .models import Category, Product
 from .permissions import IsAdminOrReadOnly
 from .paginations import ProductPagination
 from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -27,9 +28,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
     pagination_class = ProductPagination
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
     filterset_fields = {
         "category__id": ["exact"],
     }
     ordering_fields = ["price", "name", "created_at"]
     search_fields = ["name"]
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter, )
