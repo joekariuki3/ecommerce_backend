@@ -10,6 +10,7 @@ dependencies = [
     "django-rest-framework-nested>=0.0.1",
     "djangorestframework>=3.16.1",
     "djangorestframework-simplejwt>=5.5.1",
+    "drf-yasg>=1.21.10",
     "psycopg[binary]>=3.2.10",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",

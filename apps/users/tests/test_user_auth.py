@@ -8,7 +8,7 @@ def test_user_login_success(api_client, default_user):
     """
     Test a successful user login via the API.
     """
-    url = reverse("token_obtain_pair")
+    url = reverse("login")
     payload = {
         "email": default_user.email,
         "password": "password123",
@@ -26,7 +26,7 @@ def test_user_login_invalid_credentials(api_client, default_user):
     """
     Test that an invalid login attempt is rejected.
     """
-    url = reverse("token_obtain_pair")
+    url = reverse("login")
     payload = {
         "email": default_user.email,
         "password": "wrongpassword",
@@ -44,7 +44,7 @@ def test_user_login_missing_fields(api_client):
     """
     Test that login fails when required fields are missing.
     """
-    url = reverse("token_obtain_pair")
+    url = reverse("login")
     payload = {
         "email": "",
         "password": "",
@@ -62,7 +62,7 @@ def test_user_logout_success(api_client, default_user):
     Test a successful user logout via the API.
     """
     # First, log in to get a refresh token
-    login_url = reverse("token_obtain_pair")
+    login_url = reverse("login")
     login_payload = {
         "email": default_user.email,
         "password": "password123",
@@ -89,7 +89,7 @@ def test_user_token_refresh_success(api_client, default_user):
     Test a successful token refresh via the API.
     """
     # First, log in to get a refresh token
-    login_url = reverse("token_obtain_pair")
+    login_url = reverse("login")
     login_payload = {
         "email": default_user.email,
         "password": "password123",

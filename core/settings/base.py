@@ -16,9 +16,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # third-party apps (installed via pip/uv)
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
+    "drf_yasg",
 
     # local apps
     "apps.users",
@@ -87,11 +90,6 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend",
-        "rest_framework.filters.OrderingFilter",
-        "rest_framework.filters.SearchFilter",
-    ],
 }
 
 SIMPLE_JWT = {
@@ -99,4 +97,15 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "SIGNING_KEY": SECRET_KEY,
     "AUTH_HEADER_TYPES": ("Bearer",),  # "Bearer <Token>"
+}
+# Swagger / drf-yasg settings
+SWAGGER_USE_COMPAT_RENDERERS = False
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+        }
+    },
 }
