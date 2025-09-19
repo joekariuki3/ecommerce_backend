@@ -3,6 +3,7 @@ from .serializers import CategorySerializer, ProductSerializer
 from .models import Category, Product
 from .permissions import IsAdminOrReadOnly
 from .paginations import ProductPagination
+from rest_framework import filters
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -26,3 +27,5 @@ class ProductViewSet(viewsets.ModelViewSet):
         "category__id": ["exact"],
     }
     ordering_fields = ["price", "name", "created_at"]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["name"]
