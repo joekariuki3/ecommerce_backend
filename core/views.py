@@ -1,7 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 def landing_page(request):
-    return HttpResponse("""
-        <h1>Welcome to E-commerce API</h1>
-        <p>View the <a href='/swagger/'>Swagger Documentation</a> or <a href='/redoc/'>Redoc Documentation</a>.</p>
-    """)
+    return render(request, 'core/landing_page.html')
