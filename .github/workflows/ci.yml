@@ -22,9 +22,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install ruff
+          pip install ruff black isort
       - name: Ruff lint
         run: ruff check .
+      - name: Black check
+        run: black --check .
+      - name: Isort check
+        run: isort --check-only .
 
   test:
     runs-on: ubuntu-latest
