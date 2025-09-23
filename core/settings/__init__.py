@@ -9,10 +9,14 @@ load_dotenv()
 ENV = os.getenv("ENVIRONMENT")
 
 if ENV == "production":
-    from .production import (CSRF_COOKIE_SECURE, DEBUG,
-                             SECURE_BROWSER_XSS_FILTER,
-                             SECURE_CONTENT_TYPE_NOSNIFF, SECURE_SSL_REDIRECT,
-                             SESSION_COOKIE_SECURE)
+    from .production import (
+        CSRF_COOKIE_SECURE,
+        DEBUG,
+        SECURE_BROWSER_XSS_FILTER,
+        SECURE_CONTENT_TYPE_NOSNIFF,
+        SECURE_SSL_REDIRECT,
+        SESSION_COOKIE_SECURE,
+    )
 elif ENV == "testing":
     from .testing import DATABASES
 elif ENV == "staging":
