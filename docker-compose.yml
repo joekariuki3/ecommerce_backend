@@ -20,7 +20,17 @@ services:
       - "80:80"  # Nginx on 80
     depends_on:
       - db
-    command: sh -c "python manage.py migrate && sh -c 'service nginx start && gunicorn core.wsgi:application --bind 0.0.0.0:8000'"
+    command: >
+      sh -c "
+        set -e
+        python manage.py migrate
+        service nginx start
+        if ! pgrep nginx > /dev/null; then
+          echo 'Nginx failed to start' >&2
+          exit 1
+        fi
+        gunicorn core.wsgi:application --bind 0.0.0.0:8000
+      "
 
 volumes:
   e-commerce_postgres_data:
