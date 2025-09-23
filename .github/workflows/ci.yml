@@ -22,13 +22,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install ruff black isort
+          pip install ruff black isort bandit
       - name: Ruff lint
         run: ruff check .
       - name: Black check
         run: black --check .
       - name: Isort check
         run: isort --check-only .
+      - name: Bandit security check
+        run: bandit -c pyproject.toml -r core apps
+            
 
   test:
     runs-on: ubuntu-latest
