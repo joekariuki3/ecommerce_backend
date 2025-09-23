@@ -5,6 +5,7 @@ A modular, extensible backend service for an e‑commerce platform built with Dj
 ---
 
 ## Key Features
+
 - Modular app structure (`apps/users`, `apps/catalog`)
 - Token/JWT-ready authentication architecture (custom user model)
 - Category & product models with serializer + view layers
@@ -17,6 +18,7 @@ A modular, extensible backend service for an e‑commerce platform built with Dj
 ---
 
 ## Tech Stack
+
 - Python 3.10+
 - Django (core framework)
 - Django REST Framework
@@ -26,15 +28,19 @@ A modular, extensible backend service for an e‑commerce platform built with Dj
 - ASGI-ready (`core/asgi.py`)
 
 ---
+
 ## Settings Strategy
+
 - `core/settings/__init__.py`: Selects appropriate setting based on ENVIRONMENT var in `.env` file
 - `core/settings/base.py`: Shared defaults
 - `core/settings/development.py`: Local DX flags
 - `core/settings/testing.py`: Lightweight for CI
 - `core/settings/staging.py` / `production.py`: Hardened
+
 ---
 
 ## Installation (Local)
+
 1. Clone:
    ```
    git clone git@github.com:joekariuki3/ecommerce_backend.git
@@ -72,57 +78,97 @@ A modular, extensible backend service for an e‑commerce platform built with Dj
 ---
 
 ## Docker Usage
-```
-docker build -t ecommerce-backend .
-docker run -p 8000:8000 --env-file .env ecommerce-backend
-```
+
+### Quick Start with Docker Compose (Recommended)
+
+1. Clone and navigate:
+   ```
+   git clone git@github.com:joekariuki3/ecommerce_backend.git
+   cd ecommerce_backend
+   ```
+2. Set up environment:
+   ```
+   cp .env.example .env  # Or create .env with your values
+   ```
+   Edit `.env` with production values (e.g., DB passwords, SECRET_KEY).
+3. Build and run:
+   ```
+   docker build -t ecommerce-backend:prod .
+   docker-compose up -d
+   ```
+   - App runs on `http://localhost`
+   - DB on `localhost:5432` (optional)
+
+### Manual Docker Commands
+
+- Build: `docker build -t ecommerce-backend:prod .`
+- Run: `docker run -p 80:80 --env-file .env ecommerce-backend:prod`
+- With DB: Use docker-compose for full stack.
+
+### Environment Variables
+
+Required in `.env`:
+
+- `DB_*`: Database connection details
+- `SECRET_KEY`: Django secret key
+- `ALLOWED_HOSTS`: Comma-separated domains
+- `ENVIRONMENT`: Set to `production`
 
 ---
 
 ## Management Commands
+
 - `seed_users_db`: Inserts sample users.
 - `seed_category_product_db`: Inserts sample categories/products.
 
 ---
 
 ## API Overview (Illustrative)
+
 Adjust to match actual router registrations.
 
-| Area    | Endpoint (example)                            | Method | Purpose |
-|---------|-----------------------------------------------|--------|---------|
-| Auth    | `/api/users/register/`                        | POST | Create user |
-| Auth    | `/api/auth/login/`                            | POST | Obtain token/session |
-| Auth    | `/api/auth/logout/`                           | POST | Invalidate token/session |
-| Auth    | `/api/auth/refresh/`                          | POST | Refresh token |
-| Auth    | `/api/auth/verify/`                           | POST | Verify token |
-| Users   | `/api/users/me/`                              | GET | Current profile |
-| Catalog | `/api/catalog/categories/`                    | GET/POST | List/create categories |
-| Catalog | `/api/catalog/categories/{id}/`               | GET/PATCH/DELETE | Category detail |
-| Catalog | `/api/catalog/products/`                      | GET/POST | List/create products |
-| Catalog | `/api/catalog/products/{id}/`                 | GET/PATCH/DELETE | Product detail |
-| Catalog | `/api/catalog/products/?category={id}`        | GET | Filter products by category |
-| Catalog | `/api/catalog/products/?search={term}`        | GET | Search products by name/description |
-| Catalog | `/api/catalog/products/?page={n}`             | GET | Paginated product list |
-| Catalog | `/api/catalog/products/?limit={n}&offset={m}` | GET | Offset-based pagination |
-| Catalog | `/api/catalog/products/?ordering=price`       | GET | Order by price/name |
+| Area    | Endpoint (example)                            | Method           | Purpose                             |
+| ------- | --------------------------------------------- | ---------------- | ----------------------------------- |
+| Auth    | `/api/users/register/`                        | POST             | Create user                         |
+| Auth    | `/api/auth/login/`                            | POST             | Obtain token/session                |
+| Auth    | `/api/auth/logout/`                           | POST             | Invalidate token/session            |
+| Auth    | `/api/auth/refresh/`                          | POST             | Refresh token                       |
+| Auth    | `/api/auth/verify/`                           | POST             | Verify token                        |
+| Users   | `/api/users/me/`                              | GET              | Current profile                     |
+| Catalog | `/api/catalog/categories/`                    | GET/POST         | List/create categories              |
+| Catalog | `/api/catalog/categories/{id}/`               | GET/PATCH/DELETE | Category detail                     |
+| Catalog | `/api/catalog/products/`                      | GET/POST         | List/create products                |
+| Catalog | `/api/catalog/products/{id}/`                 | GET/PATCH/DELETE | Product detail                      |
+| Catalog | `/api/catalog/products/?category={id}`        | GET              | Filter products by category         |
+| Catalog | `/api/catalog/products/?search={term}`        | GET              | Search products by name/description |
+| Catalog | `/api/catalog/products/?page={n}`             | GET              | Paginated product list              |
+| Catalog | `/api/catalog/products/?limit={n}&offset={m}` | GET              | Offset-based pagination             |
+| Catalog | `/api/catalog/products/?ordering=price`       | GET              | Order by price/name                 |
+
 ---
 
 ## Testing
+
 ```
 pytest -q
 ```
+
 Pytest auto-discovers under `apps/*/tests/`. Fixtures in `conftest.py`.
 
 ---
 
 ## Data Model (High-Level)
+
 - Users: Custom user model it extends AbstractUser
 - Categories: Simple model with name, description
 - Products: Linked to Category (FK).
+
 ---
 
 ## Migrations
+
 Generate when models change:
+
 ```
 python manage.py makemigrations
 python manage.py migrate
@@ -131,13 +177,15 @@ python manage.py migrate
 ---
 
 ## Seeding / Sample Data
+
 - Use only in non-production environments.
 - Command: `python manage.py seed_users_db`
-- Command: `python manage.py seed_category_product_db`  
+- Command: `python manage.py seed_category_product_db`
 
 ---
 
 # upcoming features:
+
 - Orders & Cart service (`apps/orders`)
 - Inventory & stock reservations
 - Payment provider abstraction
@@ -148,6 +196,7 @@ python manage.py migrate
 ---
 
 ## Contributing
+
 1. Create feature branch: `git checkout -b feature/my_feature`
 2. Keep commits atomic (Consider Conventional Commits):
    - `feat(catalog): add product discount field`
@@ -158,6 +207,7 @@ python manage.py migrate
 ---
 
 ## Deployment Checklist
+
 - `DEBUG=false`
 - Secure allowed hosts
 - Run `collectstatic` if static assets added
@@ -168,6 +218,7 @@ python manage.py migrate
 ---
 
 ## Documentation
+
 Extra references in `docs/ref_doc.md` and `docs/wiki_doc.md`. Keep architecture notes there.
 
 ---
