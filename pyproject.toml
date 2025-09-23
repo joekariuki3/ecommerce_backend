@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "bandit>=1.8.6",
     "black>=25.9.0",
     "django>=5.2.6",
     "django-filter>=25.1",
@@ -28,3 +29,7 @@ include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
 line_length = 88
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101", "B601"]
