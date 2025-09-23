@@ -28,9 +28,7 @@ jobs:
       - name: Black check
         run: black --check .
       - name: Isort check
-        run: |
-          isort --profile black .
-          isort --check-only .
+        run: isort --check-only .
 
   test:
     runs-on: ubuntu-latest
