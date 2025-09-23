@@ -18,7 +18,7 @@ if ENV == "production":
         SESSION_COOKIE_SECURE,
     )
 elif ENV == "testing":
-    from .testing import DATABASES
+    from .testing import DATABASES as DATABASES
 elif ENV == "staging":
     # No overrides needed, uses the defaults from base.py
     pass
@@ -28,7 +28,6 @@ else:
     pass
 
 __all__ = [
-    "DATABASES",
     "DEBUG",
     "CSRF_COOKIE_SECURE",
     "SESSION_COOKIE_SECURE",
