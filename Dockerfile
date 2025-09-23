@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements-prod.txt
 COPY . .
 
 # Set environment variable for production
-ENV ENV=production
+ENV ENVIRONMENT=production
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
