@@ -8,9 +8,9 @@ class TestFilterProductByCategory:
     def test_filter_products_by_category(self, api_client, product_factory, category_factory):
         category1 = category_factory(name="Category 1")
         category2 = category_factory(name="Category 2")
-        product1 = product_factory(name="Product 1", description="Description1", price=30.0, stock_quantity=8, category=category1)
-        product2 = product_factory(name="Product 2", description="Description2", price=20.0, stock_quantity=7, category=category2)
-        product3 = product_factory(name="Product 3", description="Description3", price=45.0, stock_quantity=4, category=category1)
+        product_factory(name="Product 1", description="Description1", price=30.0, stock_quantity=8, category=category1)
+        product_factory(name="Product 2", description="Description2", price=20.0, stock_quantity=7, category=category2)
+        product_factory(name="Product 3", description="Description3", price=45.0, stock_quantity=4, category=category1)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"category__id": category1.id})

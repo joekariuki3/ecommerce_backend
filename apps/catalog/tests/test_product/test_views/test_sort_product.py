@@ -7,9 +7,9 @@ from rest_framework import status
 class TestSortProductByName:
     def test_sort_products_by_name_ascending(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Banana", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Apple", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Cherry", description="Description3", price=45.00, stock_quantity=4, category=category)
+        product_factory(name="Banana", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Apple", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Cherry", description="Description3", price=45.00, stock_quantity=4, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "name"})
@@ -21,9 +21,9 @@ class TestSortProductByName:
 
     def test_sort_products_by_name_descending(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Banana", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Apple", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Cherry", description="Description3", price=45.00, stock_quantity=4, category=category)
+        product_factory(name="Banana", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Apple", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Cherry", description="Description3", price=45.00, stock_quantity=4, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "-name"})
@@ -35,13 +35,13 @@ class TestSortProductByName:
 
     def test_sort_products_by_name_with_identical_names(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Apple", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Apple", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Banana", description="Description3", price=45.00, stock_quantity=4, category=category)
-        product4 = product_factory(name="Banana", description="Description4", price=25.00, stock_quantity=5, category=category)
-        product5 = product_factory(name="Cherry", description="Description5", price=15.00, stock_quantity=6, category=category)
-        product6 = product_factory(name="Cherry", description="Description6", price=35.00, stock_quantity=3, category=category)
-        product7 = product_factory(name="Date", description="Description7", price=40.00, stock_quantity=2, category=category)
+        product_factory(name="Apple", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Apple", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Banana", description="Description3", price=45.00, stock_quantity=4, category=category)
+        product_factory(name="Banana", description="Description4", price=25.00, stock_quantity=5, category=category)
+        product_factory(name="Cherry", description="Description5", price=15.00, stock_quantity=6, category=category)
+        product_factory(name="Cherry", description="Description6", price=35.00, stock_quantity=3, category=category)
+        product_factory(name="Date", description="Description7", price=40.00, stock_quantity=2, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "name"})
@@ -54,9 +54,9 @@ class TestSortProductByName:
 class TestSortProductByPrice:
     def test_sort_products_by_price_ascending(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
+        product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "price"})
@@ -68,9 +68,9 @@ class TestSortProductByPrice:
 
     def test_sort_products_by_price_descending(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
+        product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "-price"})
@@ -82,12 +82,12 @@ class TestSortProductByPrice:
 
     def test_sort_products_by_price_with_identical_prices(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Product 3", description="Description3", price=30.00, stock_quantity=4, category=category)
-        product4 = product_factory(name="Product 4", description="Description4", price=20.00, stock_quantity=5, category=category)
-        product5 = product_factory(name="Product 5", description="Description5", price=45.00, stock_quantity=6, category=category)
-        product6 = product_factory(name="Product 6", description="Description6", price=45.00, stock_quantity=3, category=category)
+        product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Product 3", description="Description3", price=30.00, stock_quantity=4, category=category)
+        product_factory(name="Product 4", description="Description4", price=20.00, stock_quantity=5, category=category)
+        product_factory(name="Product 5", description="Description5", price=45.00, stock_quantity=6, category=category)
+        product_factory(name="Product 6", description="Description6", price=45.00, stock_quantity=3, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "price"})
@@ -101,9 +101,9 @@ class TestSortProductByPrice:
 class TestSortProductByCreatedAt:
     def test_sort_products_by_created_at_ascending(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
+        product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "created_at"})
@@ -115,9 +115,9 @@ class TestSortProductByCreatedAt:
 
     def test_sort_products_by_created_at_descending(self, api_client, product_factory, category_factory):
         category = category_factory(name="Category 1")
-        product1 = product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
-        product2 = product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
-        product3 = product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
+        product_factory(name="Product 1", description="Description1", price=30.00, stock_quantity=8, category=category)
+        product_factory(name="Product 2", description="Description2", price=20.00, stock_quantity=7, category=category)
+        product_factory(name="Product 3", description="Description3", price=45.00, stock_quantity=4, category=category)
 
         url = reverse("catalog:product-list")
         response = api_client.get(url, {"ordering": "-created_at"})
