@@ -3,11 +3,11 @@ from .views import RegisterUserView, UserViewSet
 from rest_framework_nested import routers
 
 router = routers.DefaultRouter()
-router.register(prefix='me', viewset=UserViewSet, basename='me')
+router.register(prefix="me", viewset=UserViewSet, basename="me")
 
-app_name = 'users'
+app_name = "users"
 
 urlpatterns = [
     *router.urls,
-    path('register/', RegisterUserView.as_view(), name='register'),
+    path("register/", RegisterUserView.as_view(), name="register"),
 ]

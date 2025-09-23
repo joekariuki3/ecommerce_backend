@@ -8,6 +8,7 @@ class CategorySerializer(serializers.ModelSerializer):
     Handles serialization and deserialization of Category instances.
     Validates that the name field is provided and not empty.
     """
+
     class Meta:
         model = Category
         fields = ["id", "name", "description"]
@@ -25,6 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
     Validates that name, price, stock_quantity, and category_id fields are provided.
     Ensures price and stock_quantity are non-negative.
     """
+
     category = CategorySerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source="category", write_only=True

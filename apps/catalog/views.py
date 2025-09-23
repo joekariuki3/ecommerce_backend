@@ -24,6 +24,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     Supports filtering by category, searching by name, and ordering by price, name, or creation date.
     Only admin users can create, update, or delete products.
     """
+
     queryset = Product.objects.select_related("category").order_by("id")
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
@@ -33,4 +34,8 @@ class ProductViewSet(viewsets.ModelViewSet):
     }
     ordering_fields = ["price", "name", "created_at"]
     search_fields = ["name"]
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter, )
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    )
