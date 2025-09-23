@@ -1,0 +1,9 @@
+django>=5.2.6
+django-filter>=25.1
+django-rest-framework-nested>=0.0.1
+djangorestframework>=3.16.1
+djangorestframework-simplejwt>=5.5.1
+drf-yasg>=1.21.10
+gunicorn>=23.0.0
+psycopg[binary]>=3.2.10
+python-dotenv>=1.1.1
