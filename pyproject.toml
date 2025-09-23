@@ -15,5 +15,6 @@ dependencies = [
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "pytest-django>=4.11.1",
+    "pytest-env>=1.1.5",
     "python-dotenv>=1.1.1",
 ]
