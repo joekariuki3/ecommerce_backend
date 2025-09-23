@@ -1,4 +1,5 @@
 from rest_framework_nested import routers
+
 from .views import CategoryViewSet, ProductViewSet
 
 router = routers.DefaultRouter()

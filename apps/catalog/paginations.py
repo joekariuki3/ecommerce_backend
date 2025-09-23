@@ -1,5 +1,6 @@
-from rest_framework.pagination import PageNumberPagination
 import os
+
+from rest_framework.pagination import PageNumberPagination
 
 
 class ProductPagination(PageNumberPagination):

@@ -1,10 +1,10 @@
-from rest_framework import viewsets
-from .serializers import CategorySerializer, ProductSerializer
-from .models import Category, Product
-from .permissions import IsAdminOrReadOnly
-from .paginations import ProductPagination
-from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
+
+from .models import Category, Product
+from .paginations import ProductPagination
+from .permissions import IsAdminOrReadOnly
+from .serializers import CategorySerializer, ProductSerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

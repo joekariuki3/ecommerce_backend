@@ -1,16 +1,14 @@
 from django.contrib import admin
-from django.urls import path, include
-from apps.users import urls as users_urls
-from apps.catalog import urls as catalog_urls
-from apps.users.views import LogoutView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
+from django.urls import include, path
 from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView, TokenVerifyView)
+
+from apps.catalog import urls as catalog_urls
+from apps.users import urls as users_urls
+from apps.users.views import LogoutView
 from core.views import landing_page
 
 schema_view = get_schema_view(
