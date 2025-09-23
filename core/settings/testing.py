@@ -1,13 +1,12 @@
-from .base import *
 import os
 
-print(f"ENV: Testing Environment being used")
-
-DEBUG = os.getenv('DEBUG')
+from .base import BASE_DIR
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, f"{os.getenv('TEST_DB_NAME')}.sqlite3"),
+        "NAME": os.path.join(
+            BASE_DIR, f"{os.getenv('TEST_DB_NAME', 'test_db')}.sqlite3"
+        ),
     }
 }

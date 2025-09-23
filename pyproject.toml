@@ -5,15 +5,31 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "bandit>=1.8.6",
+    "black>=25.9.0",
     "django>=5.2.6",
     "django-filter>=25.1",
     "django-rest-framework-nested>=0.0.1",
     "djangorestframework>=3.16.1",
     "djangorestframework-simplejwt>=5.5.1",
     "drf-yasg>=1.21.10",
+    "isort>=6.0.1",
     "psycopg[binary]>=3.2.10",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "pytest-django>=4.11.1",
+    "pytest-env>=1.1.5",
     "python-dotenv>=1.1.1",
 ]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101", "B601"]

@@ -1,9 +1,10 @@
+from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets, permissions, status
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RegisterUserSerializer, UserSerializer
+
 from .models import User
+from .serializers import RegisterUserSerializer, UserSerializer
 
 
 class RegisterUserView(APIView):

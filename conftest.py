@@ -1,6 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
+
 from apps.catalog.models import Category, Product
 
 
@@ -104,6 +105,7 @@ def product_factory():
 
     return create_product
 
+
 @pytest.fixture
 def create_categories(category_factory):
     """
@@ -123,6 +125,7 @@ def create_categories(category_factory):
 
     return make_categories
 
+
 @pytest.fixture
 def create_products(product_factory, create_categories):
     """
@@ -137,9 +140,12 @@ def create_products(product_factory, create_categories):
                 "name": f"Product {i+1}",
                 "description": f"Description for product {i+1}",
                 "price": 10.0 + i,
-                "category": categories[i % len(categories)],  # Assign categories in a round-robin fashion
+                "category": categories[
+                    i % len(categories)
+                ],  # Assign categories in a round-robin fashion
             }
             product_data.update(kwargs)
             products.append(product_factory(**product_data))
         return products
+
     return make_products

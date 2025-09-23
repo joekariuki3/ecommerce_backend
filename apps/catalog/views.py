@@ -1,10 +1,10 @@
-from rest_framework import viewsets
-from .serializers import CategorySerializer, ProductSerializer
-from .models import Category, Product
-from .permissions import IsAdminOrReadOnly
-from .paginations import ProductPagination
-from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
+
+from .models import Category, Product
+from .paginations import ProductPagination
+from .permissions import IsAdminOrReadOnly
+from .serializers import CategorySerializer, ProductSerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -24,6 +24,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     Supports filtering by category, searching by name, and ordering by price, name, or creation date.
     Only admin users can create, update, or delete products.
     """
+
     queryset = Product.objects.select_related("category").order_by("id")
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
@@ -33,4 +34,8 @@ class ProductViewSet(viewsets.ModelViewSet):
     }
     ordering_fields = ["price", "name", "created_at"]
     search_fields = ["name"]
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter, )
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    )
