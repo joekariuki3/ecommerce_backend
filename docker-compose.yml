@@ -25,10 +25,6 @@ services:
         set -e
         python manage.py migrate
         service nginx start
-        if ! pgrep nginx > /dev/null; then
-          echo 'Nginx failed to start' >&2
-          exit 1
-        fi
         gunicorn core.wsgi:application --bind 0.0.0.0:8000
       "
 
