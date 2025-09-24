@@ -29,8 +29,36 @@ jobs:
         run: black --check .
       - name: Isort check
         run: isort --check-only .
+
+  security:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Install security tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit safety
+
       - name: Bandit security check
         run: bandit -c pyproject.toml -r core apps
+
+      - name: Safety dependency check
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+        run: safety scan --file requirements-prod.txt
+      - name: Safety dependency check (dev)
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+        run: safety scan --file requirements.txt
 
   test:
     runs-on: ubuntu-latest
@@ -54,7 +82,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, security]
     permissions:
       contents: read
       packages: write
