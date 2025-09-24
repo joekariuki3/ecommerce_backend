@@ -54,11 +54,7 @@ jobs:
       - name: Safety dependency check
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
-        run: safety scan --file requirements-prod.txt
-      - name: Safety dependency check (dev)
-        env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
-        run: safety scan --file requirements.txt
+        run: safety scan
 
   test:
     runs-on: ubuntu-latest
