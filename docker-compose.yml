@@ -12,7 +12,7 @@ services:
       - "5432:5432"
 
   web:
-    image: ecommerce-backend:prod
+    image: ghcr.io/joekariuki3/ecommerce_backend:latest
     restart: always
     env_file:
       - .env
