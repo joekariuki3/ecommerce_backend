@@ -1,12 +1,17 @@
 name: CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
-      - develop
-      - "feature/**"
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - production
+          - staging
+          - testing
 
 env:
   REGISTRY: ghcr.io
@@ -15,7 +20,7 @@ env:
 jobs:
   deploy-production:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: inputs.environment == 'production'
 
     steps:
       - name: Checkout repository
@@ -57,7 +62,7 @@ jobs:
 
   deploy-staging:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: inputs.environment == 'staging'
 
     steps:
       - name: Checkout repository
@@ -96,7 +101,7 @@ jobs:
 
   deploy-feature-testing:
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'refs/heads/feature/')
+    if: inputs.environment == 'testing'
 
     steps:
       - name: Checkout repository
@@ -113,9 +118,8 @@ jobs:
             # Navigate to project directory
             cd ~/ecommerce_backend
 
-            # Extract branch name from GITHUB_REF (e.g., refs/heads/feature/my-feature -> feature/my-feature)
-            BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')
-            export IMAGE_TAG=$BRANCH_NAME
+            # Set image tag for testing (use develop branch for testing)
+            export IMAGE_TAG=develop
 
             # Stop current containers
             docker-compose down
@@ -132,4 +136,4 @@ jobs:
             # Check container status
             docker-compose ps
 
-            echo "Feature testing deployment completed successfully!"
+            echo "Testing deployment completed successfully!"
