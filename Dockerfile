@@ -23,7 +23,10 @@ ENV ENVIRONMENT=production
 RUN python manage.py collectstatic --noinput
 
 # Copy Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/sites-available/app
+
+# Create symlink to enable the site
+RUN ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 
 # Remove default Nginx configuration
 RUN rm /etc/nginx/sites-available/default
