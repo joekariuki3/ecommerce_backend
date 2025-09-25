@@ -56,7 +56,7 @@ jobs:
             docker compose ps
 
             # Run health check
-            curl -f http://localhost || echo "Health check failed"
+            curl -f http://localhost || { echo "Health check failed"; exit 1; }
 
             echo "Production deployment completed successfully!"
 
