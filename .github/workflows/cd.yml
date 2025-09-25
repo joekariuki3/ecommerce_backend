@@ -41,19 +41,19 @@ jobs:
             export IMAGE_TAG=latest
 
             # Stop current containers
-            docker-compose down
+            docker compose down
 
             # Pull latest image from registry
-            docker-compose pull
+            docker compose pull
 
             # Start containers
-            docker-compose up -d
+            docker compose up -d
 
             # Wait for services to be healthy
             sleep 30
 
             # Check container status
-            docker-compose ps
+            docker compose ps
 
             # Run health check
             curl -f http://localhost || echo "Health check failed"
@@ -83,19 +83,19 @@ jobs:
             export IMAGE_TAG=develop
 
             # Stop current containers
-            docker-compose down
+            docker compose down
 
             # Pull latest image from registry
-            docker-compose pull
+            docker compose pull
 
             # Start containers
-            docker-compose up -d
+            docker compose up -d
 
             # Wait for services to be healthy
             sleep 30
 
             # Check container status
-            docker-compose ps
+            docker compose ps
 
             echo "Staging deployment completed successfully!"
 
@@ -122,18 +122,18 @@ jobs:
             export IMAGE_TAG=develop
 
             # Stop current containers
-            docker-compose down
+            docker compose down
 
             # Pull latest image from registry
-            docker-compose pull
+            docker compose pull
 
             # Start containers
-            docker-compose up -d
+            docker compose up -d
 
             # Wait for services to be healthy
             sleep 30
 
             # Check container status
-            docker-compose ps
+            docker compose ps
 
             echo "Testing deployment completed successfully!"

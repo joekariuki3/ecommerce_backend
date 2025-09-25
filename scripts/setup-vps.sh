@@ -77,6 +77,17 @@ else
     usermod -aG docker "$USERNAME"
 fi
 
+# Verify Docker and Docker Compose installation
+echo "Verifying Docker and Docker Compose installation..."
+if command -v docker &> /dev/null && docker compose version &> /dev/null; then
+    echo "✅ Docker and Docker Compose are properly installed"
+    docker --version
+    docker compose version
+else
+    echo "❌ Docker or Docker Compose installation failed"
+    exit 1
+fi
+
 # 7. Prepare app directory (check if exists)
 APP_DIR="/home/$USERNAME/ecommerce_backend"
 if [ -d "$APP_DIR" ]; then
@@ -97,5 +108,6 @@ echo "Setup complete! Reboot the server if needed: sudo reboot"
 echo "Next steps:"
 echo "1. SSH in as $USERNAME (using your SSH key)."
 echo "2. Copy your project files (docker-compose.yml, .env) to $APP_DIR."
-echo "3. Run: cd $APP_DIR && docker-compose up -d"
-echo "4. For SSL, consider Certbot: apt install certbot python3-certbot-nginx"
+echo "3. Test Docker Compose: docker compose version"
+echo "4. Run: cd $APP_DIR && docker compose up -d"
+echo "5. For SSL, consider Certbot: apt install certbot python3-certbot-nginx"
