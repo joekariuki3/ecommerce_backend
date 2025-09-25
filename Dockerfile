@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     nginx \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -18,11 +19,12 @@ COPY . .
 # Set environment variable for production
 ENV ENVIRONMENT=production
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
 # Copy Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/sites-available/app
+COPY nginx/proxy_params /etc/nginx/proxy_params
+
+# Create symlink to enable the site
+RUN ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 
 # Remove default Nginx configuration
 RUN rm /etc/nginx/sites-available/default
