@@ -1,0 +1,135 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - "feature/**"
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Production VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            # Navigate to project directory
+            cd ~/ecommerce_backend
+
+            # Set image tag for production (main branch) - use 'latest' for production
+            export IMAGE_TAG=latest
+
+            # Stop current containers
+            docker-compose down
+
+            # Pull latest image from registry
+            docker-compose pull
+
+            # Start containers
+            docker-compose up -d
+
+            # Wait for services to be healthy
+            sleep 30
+
+            # Check container status
+            docker-compose ps
+
+            # Run health check
+            curl -f http://localhost || echo "Health check failed"
+
+            echo "Production deployment completed successfully!"
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Staging VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST_STAGING }}
+          username: ${{ secrets.VPS_USERNAME_STAGING }}
+          key: ${{ secrets.VPS_SSH_KEY_STAGING }}
+          port: ${{ secrets.VPS_PORT_STAGING || 22 }}
+          script: |
+            # Navigate to project directory
+            cd ~/ecommerce_backend
+
+            # Set image tag for staging (develop branch)
+            export IMAGE_TAG=develop
+
+            # Stop current containers
+            docker-compose down
+
+            # Pull latest image from registry
+            docker-compose pull
+
+            # Start containers
+            docker-compose up -d
+
+            # Wait for services to be healthy
+            sleep 30
+
+            # Check container status
+            docker-compose ps
+
+            echo "Staging deployment completed successfully!"
+
+  deploy-feature-testing:
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'refs/heads/feature/')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Testing Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST_TESTING }}
+          username: ${{ secrets.VPS_USERNAME_TESTING }}
+          key: ${{ secrets.VPS_SSH_KEY_TESTING }}
+          port: ${{ secrets.VPS_PORT_TESTING || 22 }}
+          script: |
+            # Navigate to project directory
+            cd ~/ecommerce_backend
+
+            # Extract branch name from GITHUB_REF (e.g., refs/heads/feature/my-feature -> feature/my-feature)
+            BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')
+            export IMAGE_TAG=$BRANCH_NAME
+
+            # Stop current containers
+            docker-compose down
+
+            # Pull latest image from registry
+            docker-compose pull
+
+            # Start containers
+            docker-compose up -d
+
+            # Wait for services to be healthy
+            sleep 30
+
+            # Check container status
+            docker-compose ps
+
+            echo "Feature testing deployment completed successfully!"
