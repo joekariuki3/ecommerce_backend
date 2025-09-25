@@ -1,4 +1,4 @@
-name: Python CI
+name: ecommerce_backend CI Pipeline
 
 on:
   push:

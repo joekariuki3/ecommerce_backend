@@ -1,4 +1,4 @@
-name: CD Pipeline
+name: ecommerce_backend CD Pipeline
 
 on:
   workflow_dispatch:
