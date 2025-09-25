@@ -19,9 +19,6 @@ COPY . .
 # Set environment variable for production
 ENV ENVIRONMENT=production
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/sites-available/app
 
