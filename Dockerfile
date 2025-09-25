@@ -20,7 +20,8 @@ COPY . .
 ENV ENVIRONMENT=production
 
 # Copy Nginx configuration
-COPY nginx.conf /etc/nginx/sites-available/app
+COPY nginx/nginx.conf /etc/nginx/sites-available/app
+COPY nginx/proxy_params /etc/nginx/proxy_params
 
 # Create symlink to enable the site
 RUN ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
