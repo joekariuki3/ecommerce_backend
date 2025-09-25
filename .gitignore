@@ -136,3 +136,6 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+
+# Personal weekly journal files
+*weekly_journal*

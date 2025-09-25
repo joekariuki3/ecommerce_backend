@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - e-commerce_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    image: ghcr.io/joekariuki3/ecommerce_backend:${IMAGE_TAG:-latest}
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "80:80"  # Nginx on 80
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+        set -e
+        python manage.py migrate
+        python manage.py collectstatic --noinput
+        service nginx start
+        gunicorn core.wsgi:application --bind 0.0.0.0:8000
+      "
+
+volumes:
+  e-commerce_postgres_data:
