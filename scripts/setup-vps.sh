@@ -75,9 +75,24 @@ else
     fi
 
     echo "Applying SSH security settings..."
-    sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' "$SSH_CONFIG"
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' "$SSH_CONFIG"
-    sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' "$SSH_CONFIG"
+    # Set PermitRootLogin no (replace any existing line, commented or not, with any value)
+    if grep -Eq '^\s*#?\s*PermitRootLogin\s+' "$SSH_CONFIG"; then
+        sed -i 's/^\s*#\?\s*PermitRootLogin\s\+.*/PermitRootLogin no/' "$SSH_CONFIG"
+    else
+        echo 'PermitRootLogin no' >> "$SSH_CONFIG"
+    fi
+    # Set PasswordAuthentication no
+    if grep -Eq '^\s*#?\s*PasswordAuthentication\s+' "$SSH_CONFIG"; then
+        sed -i 's/^\s*#\?\s*PasswordAuthentication\s\+.*/PasswordAuthentication no/' "$SSH_CONFIG"
+    else
+        echo 'PasswordAuthentication no' >> "$SSH_CONFIG"
+    fi
+    # Set PubkeyAuthentication yes
+    if grep -Eq '^\s*#?\s*PubkeyAuthentication\s+' "$SSH_CONFIG"; then
+        sed -i 's/^\s*#\?\s*PubkeyAuthentication\s\+.*/PubkeyAuthentication yes/' "$SSH_CONFIG"
+    else
+        echo 'PubkeyAuthentication yes' >> "$SSH_CONFIG"
+    fi
     systemctl restart ssh
     echo "✅ SSH security settings applied"
 fi
