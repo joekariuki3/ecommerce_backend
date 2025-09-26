@@ -1,4 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import filters, viewsets
 
 from .models import Category, Product
@@ -39,3 +41,29 @@ class ProductViewSet(viewsets.ModelViewSet):
         filters.OrderingFilter,
         filters.SearchFilter,
     )
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                "category_id",
+                openapi.IN_QUERY,
+                description="Filter products by category ID (exact match) (UUID).",
+                type=openapi.TYPE_STRING,
+            ),
+            openapi.Parameter(
+                "ordering",
+                openapi.IN_QUERY,
+                description="Order products by field. Options: price, name, created_at (prefix with '-' for descending, e.g., -price).",
+                type=openapi.TYPE_STRING,
+                enum=["price", "name", "created_at", "-price", "-name", "-created_at"],
+            ),
+            openapi.Parameter(
+                "search",
+                openapi.IN_QUERY,
+                description="Search products by name (case-insensitive partial match).",
+                type=openapi.TYPE_STRING,
+            ),
+        ],
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
