@@ -8,6 +8,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", default=os.urandom(256).hex())
 hosts = os.getenv("ALLOWED_HOSTS")
 ALLOWED_HOSTS = hosts.split(",") if hosts else []
 
+DEBUG = True
+
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.postgresql"),
