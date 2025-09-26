@@ -26,7 +26,22 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             "password",
         ]
         read_only_fields = ("id", "last_login", "date_joined")
-        required_fields = ("first_name", "last_name", "username", "email", "password")
+        required_fields = (
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "password",
+        )
+
+    def validate(self, attrs):
+        if attrs.get("is_staff", False):
+            if User.objects.filter(is_staff=True).exists():
+                raise serializers.ValidationError(
+                    {"is_staff": "Only one admin user (is_staff=True) is allowed."}
+                )
+
+        return attrs
 
     def create(self, validated_data):
         """Create and return a new User instance, given the validated data."""

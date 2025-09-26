@@ -1,4 +1,5 @@
 from rest_framework import permissions, status, viewsets
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -7,12 +8,8 @@ from .models import User
 from .serializers import RegisterUserSerializer, UserSerializer
 
 
-class RegisterUserView(APIView):
-    def post(self, request):
-        serializer = RegisterUserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+class RegisterUserView(CreateAPIView):
+    serializer_class = RegisterUserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
