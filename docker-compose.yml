@@ -20,10 +20,15 @@ services:
     env_file:
       - .env
     ports:
-      - "80:80"  # Nginx on 80
+      - "80:80"
+      - "443:443"
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./nginx:/etc/nginx/sites-available
+      - certbot-webroot:/var/www/certbot:rw
+      - nginx-cert-volume:/etc/letsencrypt:ro
     command: >
       sh -c "
         set -e
@@ -33,5 +38,18 @@ services:
         gunicorn core.wsgi:application --bind 0.0.0.0:8000
       "
 
+  certbot:
+    image: certbot/certbot
+    # The container will exit after completing its task
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - certbot-webroot:/var/www/certbot:rw
+      - nginx-cert-volume:/etc/letsencrypt:rw
+    # Only run the certbot service when the domain is accessible
+    depends_on:
+      - web
+
 volumes:
   e-commerce_postgres_data:
+  certbot-webroot: # Used to serve challenge files
+  nginx-cert-volume: # Used to store certificates
