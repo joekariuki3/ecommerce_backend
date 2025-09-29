@@ -45,7 +45,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
-                "category_id",
+                "category__id",
                 openapi.IN_QUERY,
                 description="Filter products by category ID (exact match) (UUID).",
                 type=openapi.TYPE_STRING,
