@@ -2,12 +2,6 @@
 # Pre-push Git hook to run tests before allowing a push
 # Save this script as .git/hooks/pre-push and make it executable (chmod +x .git/hooks/pre-push)
 
-# Check if tests should be skipped
-if [ "$1" == "--no-verify" ]; then
-    echo "⚠️  Skipping tests as per --no-verify flag."
-    exit 0
-fi
-
 echo "🧪 Running pre-push tests..."
 
 # Colors for output

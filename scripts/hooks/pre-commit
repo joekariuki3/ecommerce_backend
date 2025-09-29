@@ -4,12 +4,6 @@
 # To enable this hook, save this file as .git/hooks/pre-commit and make it executable.
 # chmod +x .git/hooks/pre-commit
 
-# Check if pre-commit should be skipped
-if [ "$1" == "--no-verify" ]; then
-    echo "⚠️  Skipping pre-commit checks as per --no-verify flag."
-    exit 0
-fi
-
 
 echo "🔍 Running pre-commit checks..."
 
