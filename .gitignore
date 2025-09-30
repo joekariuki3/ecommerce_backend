@@ -139,3 +139,7 @@ pyrightconfig.json
 
 # Personal weekly journal files
 *weekly_journal*
+
+# safety vulnerability reports
+.safety/
+.safety-project.ini
