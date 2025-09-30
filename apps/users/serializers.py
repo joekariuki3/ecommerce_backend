@@ -3,59 +3,6 @@ from rest_framework import serializers
 from .models import User
 
 
-class RegisterUserSerializer(serializers.ModelSerializer):
-    """
-    Serializer for registering a new user.
-    Handles serialization and deserialization of User instances.
-    Validates that username, first_name, last_name, email, and password fields are provided.
-    Ensures password is hashed before saving the user.
-    """
-
-    class Meta:
-        model = User
-        fields = [
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-            "email",
-            "is_staff",
-            "last_login",
-            "is_active",
-            "date_joined",
-            "password",
-        ]
-        read_only_fields = ("id", "last_login", "date_joined")
-        required_fields = (
-            "first_name",
-            "last_name",
-            "username",
-            "email",
-            "password",
-        )
-
-    def validate(self, attrs):
-        if attrs.get("is_staff", False):
-            if User.objects.filter(is_staff=True).exists():
-                raise serializers.ValidationError(
-                    {"is_staff": "Only one admin user (is_staff=True) is allowed."}
-                )
-
-        return attrs
-
-    def create(self, validated_data):
-        """Create and return a new User instance, given the validated data."""
-        password = validated_data.get("password")
-        is_staff = validated_data.get("is_staff")
-        instance = self.Meta.model(**validated_data)
-        if password:
-            instance.set_password(password)
-        if is_staff and is_staff == "true":
-            instance.is_staff = True
-        user = User.objects.create_user(**validated_data)
-        return user
-
-
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializer for User model.
@@ -71,9 +18,44 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "is_staff",
-            "last_login",
-            "is_active",
             "date_joined",
+            "last_login",
+            "password",
         ]
         read_only_fields = ("id", "last_login", "date_joined")
-        required_fields = ("first_name", "last_name", "username", "email", "password")
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
+
+    def create(self, validated_data):
+        """Create and return a new User instance using Django's create_user method."""
+        password = validated_data.pop("password", None)
+        is_staff = validated_data.pop("is_staff", False)
+        user = User.objects.create_user(
+            password=password, is_active=True, **validated_data
+        )
+        user.is_staff = is_staff
+        user.save()
+        return user
+
+    def validate(self, data):
+        """
+        Validate the given data and raise a Validation error
+        if there is already an admin user.
+        """
+        if data.get("is_staff"):
+            if User.objects.filter(is_staff=True).exists():
+                raise serializers.ValidationError(
+                    {"is_staff": "Only one admin user is allowed."}
+                )
+        return data
+
+    def update(self, instance, validated_data):
+        """Update and return an existing User instance."""
+        user_data = validated_data.copy()
+        password = user_data.pop("password", None)
+
+        if password is not None:
+            instance.set_password(password)
+
+        return super().update(instance, user_data)
