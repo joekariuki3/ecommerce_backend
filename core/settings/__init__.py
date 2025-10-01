@@ -2,36 +2,24 @@ import os
 
 from dotenv import load_dotenv
 
-from .base import *  # noqa F401, F403
-
 load_dotenv()
 
-ENV = os.getenv("ENVIRONMENT")
+from .base import *  # noqa
+
+ENV = os.getenv("ENVIRONMENT", "development")
 
 if ENV == "production":
-    from .production import (
-        CSRF_COOKIE_SECURE,
-        DEBUG,
-        SECURE_BROWSER_XSS_FILTER,
-        SECURE_CONTENT_TYPE_NOSNIFF,
-        SECURE_SSL_REDIRECT,
-        SESSION_COOKIE_SECURE,
-    )
+    from .production import CSRF_COOKIE_SECURE as CSRF_COOKIE_SECURE
+    from .production import DEBUG as DEBUG
+    from .production import LOGGING as LOGGING
+    from .production import SECURE_BROWSER_XSS_FILTER as SECURE_BROWSER_XSS_FILTER
+    from .production import SECURE_CONTENT_TYPE_NOSNIFF as SECURE_CONTENT_TYPE_NOSNIFF
+    from .production import SECURE_SSL_REDIRECT as SECURE_SSL_REDIRECT
+    from .production import SESSION_COOKIE_SECURE as SESSION_COOKIE_SECURE
 elif ENV == "testing":
     from .testing import DATABASES as DATABASES
-elif ENV == "staging":
-    # No overrides needed, uses the defaults from base.py
-    pass
+    from .testing import LOGGING as LOGGING
 else:
-    # Default to development environment
-    # No overrides needed, uses the defaults from base.py
-    pass
-
-__all__ = [
-    "DEBUG",
-    "CSRF_COOKIE_SECURE",
-    "SESSION_COOKIE_SECURE",
-    "SECURE_BROWSER_XSS_FILTER",
-    "SECURE_CONTENT_TYPE_NOSNIFF",
-    "SECURE_SSL_REDIRECT",
-]
+    # Default to development
+    from .development import DEBUG as DEBUG
+    from .development import LOGGING as LOGGING
