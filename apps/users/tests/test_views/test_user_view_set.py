@@ -10,7 +10,7 @@ def test_retrieve_user_profile_success(authenticated_client_and_user):
     Test that an authenticated user can retrieve their profile details.
     """
     client, user = authenticated_client_and_user
-    url = reverse("users:me-list")
+    url = reverse("users:user-list")
     response = client.get(url)
 
     assert response.status_code == status.HTTP_200_OK
@@ -23,7 +23,7 @@ def test_update_user_profile(authenticated_client_and_user):
     Test that an authenticated user can update their profile.
     """
     client, user = authenticated_client_and_user
-    url = reverse("users:me-detail", kwargs={"pk": user.id})
+    url = reverse("users:user-detail", kwargs={"pk": user.id})
     payload = {
         "first_name": "Jane",
         "last_name": "Doe",
@@ -42,7 +42,7 @@ def test_delete_user_profile(authenticated_client_and_user):
     """
     client, user = authenticated_client_and_user
 
-    url = reverse("users:me-detail", kwargs={"pk": user.id})
+    url = reverse("users:user-detail", kwargs={"pk": user.id})
 
     response = client.delete(url)
 

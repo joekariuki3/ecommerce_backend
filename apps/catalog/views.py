@@ -1,3 +1,5 @@
+import logging
+
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -7,6 +9,8 @@ from .models import Category, Product
 from .paginations import ProductPagination
 from .permissions import IsAdminOrReadOnly
 from .serializers import CategorySerializer, ProductSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -18,6 +22,18 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAdminOrReadOnly]
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        logger.info(f"Category created: {serializer.data.get('name')}")
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        logger.info(f"Category updated: {serializer.data.get('name')}")
+
+    def perform_destroy(self, instance):
+        logger.info(f"Category deleted: {instance.name}")
+        super().perform_destroy(instance)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -41,6 +57,18 @@ class ProductViewSet(viewsets.ModelViewSet):
         filters.OrderingFilter,
         filters.SearchFilter,
     )
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        logger.info(f"Product created: {serializer.data.get('name')}")
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        logger.info(f"Product updated: {serializer.data.get('name')}")
+
+    def perform_destroy(self, instance):
+        logger.info(f"Product deleted: {instance.name}")
+        super().perform_destroy(instance)
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -66,4 +94,5 @@ class ProductViewSet(viewsets.ModelViewSet):
         ],
     )
     def list(self, request, *args, **kwargs):
+        logger.info("Product list viewed.")
         return super().list(request, *args, **kwargs)
