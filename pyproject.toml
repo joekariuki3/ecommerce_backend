@@ -17,6 +17,7 @@ dependencies = [
     "pytest-django>=4.11.1",
     "pytest-env>=1.1.5",
     "python-dotenv>=1.1.1",
+    "python-json-logger>=3.3.0",
 ]
 
 [tool.isort]
