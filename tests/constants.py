@@ -7,7 +7,7 @@ import os
 from enum import Enum
 
 
-class TestUsers(Enum):
+class UserTestData(Enum):
     """Test user data constants."""
 
     DEFAULT_USERNAME = os.getenv("TEST_DEFAULT_USERNAME", "testuser")
@@ -84,20 +84,20 @@ def get_test_user_data(user_type: str = "default") -> dict:
     """
     user_data_map = {
         "default": {
-            "username": TestUsers.DEFAULT_USERNAME.value,
-            "email": TestUsers.DEFAULT_EMAIL.value,
-            "password": TestUsers.DEFAULT_PASSWORD.value,
+            "username": UserTestData.DEFAULT_USERNAME.value,
+            "email": UserTestData.DEFAULT_EMAIL.value,
+            "password": UserTestData.DEFAULT_PASSWORD.value,
         },
         "admin": {
-            "username": TestUsers.ADMIN_USERNAME.value,
-            "email": TestUsers.ADMIN_EMAIL.value,
-            "password": TestUsers.ADMIN_PASSWORD.value,
+            "username": UserTestData.ADMIN_USERNAME.value,
+            "email": UserTestData.ADMIN_EMAIL.value,
+            "password": UserTestData.ADMIN_PASSWORD.value,
             "is_staff": True,
         },
         "super": {
-            "username": TestUsers.SUPER_USERNAME.value,
-            "email": TestUsers.SUPER_EMAIL.value,
-            "password": TestUsers.SUPER_PASSWORD.value,
+            "username": UserTestData.SUPER_USERNAME.value,
+            "email": UserTestData.SUPER_EMAIL.value,
+            "password": UserTestData.SUPER_PASSWORD.value,
             "is_superuser": True,
         },
     }

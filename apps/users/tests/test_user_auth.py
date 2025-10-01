@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from tests.constants import TestUsers
+from tests.constants import UserTestData
 
 
 @pytest.mark.django_db
@@ -13,7 +13,7 @@ def test_user_login_success(api_client, default_user):
     url = reverse("login")
     payload = {
         "email": default_user.email,
-        "password": TestUsers.DEFAULT_PASSWORD.value,
+        "password": UserTestData.DEFAULT_PASSWORD.value,
     }
 
     response = api_client.post(url, payload, format="json")
@@ -31,7 +31,7 @@ def test_user_login_invalid_credentials(api_client, default_user):
     url = reverse("login")
     payload = {
         "email": default_user.email,
-        "password": TestUsers.WRONG_PASSWORD.value,  # Incorrect password
+        "password": UserTestData.WRONG_PASSWORD.value,  # Incorrect password
     }
     response = api_client.post(url, payload, format="json")
 
@@ -67,7 +67,7 @@ def test_user_logout_success(api_client, default_user):
     login_url = reverse("login")
     login_payload = {
         "email": default_user.email,
-        "password": TestUsers.DEFAULT_PASSWORD.value,
+        "password": UserTestData.DEFAULT_PASSWORD.value,
     }
     login_response = api_client.post(login_url, login_payload, format="json")
     refresh_token = login_response.data["refresh"]
@@ -94,7 +94,7 @@ def test_user_token_refresh_success(api_client, default_user):
     login_url = reverse("login")
     login_payload = {
         "email": default_user.email,
-        "password": TestUsers.DEFAULT_PASSWORD.value,
+        "password": UserTestData.DEFAULT_PASSWORD.value,
     }
     login_response = api_client.post(login_url, login_payload, format="json")
     refresh_token = login_response.data["refresh"]

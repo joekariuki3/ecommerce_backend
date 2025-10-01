@@ -15,7 +15,7 @@ The `tests/constants.py` file contains all test data constants organized into en
 
 ### Enums
 
-- **`TestUsers`**: User credentials and data (username, email, password)
+- **`UserTestData`**: User credentials and data (username, email, password)
 - **`TestCategories`**: Category-related test data
 - **`TestProducts`**: Product-related test data
 - **`TestDatabase`**: Database names for testing
@@ -43,12 +43,12 @@ def default_user(user_factory):
 ### In Test Files
 
 ```python
-from tests.constants import TestUsers
+from tests.constants import UserTestData
 
 def test_login(api_client, default_user):
     payload = {
         "email": default_user.email,
-        "password": TestUsers.DEFAULT_PASSWORD.value,
+        "password": UserTestData.DEFAULT_PASSWORD.value,
     }
 ```
 
