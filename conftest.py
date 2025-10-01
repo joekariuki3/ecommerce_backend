@@ -3,6 +3,11 @@ from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
 from apps.catalog.models import Category, Product
+from tests.constants import (
+    get_test_category_data,
+    get_test_product_data,
+    get_test_user_data,
+)
 
 
 @pytest.fixture
@@ -23,9 +28,8 @@ def default_user(user_factory):
     """
     Returns a simple, non-admin User instance.
     """
-    return user_factory(
-        username="testuser", email="testuser@mail.com", password="password123"
-    )
+    user_data = get_test_user_data("default")
+    return user_factory(**user_data)
 
 
 @pytest.fixture
@@ -33,12 +37,8 @@ def admin_user(user_factory):
     """
     Returns a admin User instance.
     """
-    return user_factory(
-        username="adminuser",
-        email="adminuser@mail.com",
-        password="password123",
-        is_staff=True,
-    )
+    user_data = get_test_user_data("admin")
+    return user_factory(**user_data)
 
 
 @pytest.fixture
@@ -46,12 +46,8 @@ def superuser(user_factory):
     """
     Returns a superuser instance.
     """
-    return user_factory(
-        username="superuser",
-        email="superuser@mail.com",
-        password="password123",
-        is_superuser=True,
-    )
+    user_data = get_test_user_data("super")
+    return user_factory(**user_data)
 
 
 @pytest.fixture
@@ -115,11 +111,7 @@ def create_categories(category_factory):
     def make_categories(count, **kwargs):
         categories = []
         for i in range(count):
-            category_data = {
-                "name": f"Category {i+1}",
-                "description": f"Description for category {i+1}",
-            }
-            category_data.update(kwargs)
+            category_data = get_test_category_data(i, **kwargs)
             categories.append(category_factory(**category_data))
         return categories
 
@@ -136,15 +128,8 @@ def create_products(product_factory, create_categories):
         products = []
         categories = create_categories(5)
         for i in range(count):
-            product_data = {
-                "name": f"Product {i+1}",
-                "description": f"Description for product {i+1}",
-                "price": 10.0 + i,
-                "category": categories[
-                    i % len(categories)
-                ],  # Assign categories in a round-robin fashion
-            }
-            product_data.update(kwargs)
+            category = categories[i % len(categories)]  # Round-robin assignment
+            product_data = get_test_product_data(i, category=category, **kwargs)
             products.append(product_factory(**product_data))
         return products
 
