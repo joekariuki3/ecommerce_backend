@@ -1,224 +1,597 @@
 # E-Commerce Backend (Django + DRF)
 
-A modular, extensible backend service for an e‑commerce platform built with Django and Django REST Framework. It provides user management and catalog (categories/products) functionality with a clean architecture and environment-specific settings.
+A modern, scalable backend service for an e-commerce platform built with Django and Django REST Framework. This project provides comprehensive user management, product catalog functionality, JWT authentication, and API documentation with a clean, modular architecture and environment-specific configurations.
+
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
+[![Django](https://img.shields.io/badge/django-5.2+-green.svg)](https://djangoproject.com)
+[![DRF](https://img.shields.io/badge/DRF-3.16+-orange.svg)](https://django-rest-framework.org)
+[![PostgreSQL](https://img.shields.io/badge/postgresql-15+-blue.svg)](https://postgresql.org)
 
 ---
 
-## Key Features
+## 🚀 Key Features
 
-- Modular app structure (`apps/users`, `apps/catalog`)
-- Token/JWT-ready authentication architecture (custom user model)
-- Category & product models with serializer + view layers
-- DRF pagination & permissions abstractions
-- Environment-specific settings (`development`, `staging`, `production`, `testing`)
-- Seed script for bootstrap data (`seed_category_product_db`)
-- Dockerized deployment workflow
-- Pytest test suite scaffold
-
----
-
-## Tech Stack
-
-- Python 3.10+
-- Django (core framework)
-- Django REST Framework
-- PostgreSQL (recommended) / SQLite (dev fallback)
-- Pytest
-- Docker / Docker Compose (optional)
-- ASGI-ready (`core/asgi.py`)
+- **Modular Architecture**: Clean separation with `apps/users` and `apps/catalog`
+- **JWT Authentication**: Secure token-based authentication with refresh/blacklist capabilities
+- **Advanced API Features**: Filtering, sorting, pagination, and search functionality
+- **Comprehensive Testing**: pytest with coverage reporting and fixtures
+- **API Documentation**: Auto-generated Swagger/OpenAPI documentation with drf-yasg
+- **Environment Management**: Multi-environment configuration (development/staging/production/testing)
+- **Production Ready**: Docker deployment with Nginx, Gunicorn, and PostgreSQL
+- **Developer Tools**: Management commands for database seeding and development
+- **Code Quality**: Configured with coverage reporting and modern Python tooling
 
 ---
 
-## Settings Strategy
+## 🛠 Tech Stack
 
-- `core/settings/__init__.py`: Selects appropriate setting based on ENVIRONMENT var in `.env` file
-- `core/settings/base.py`: Shared defaults
-- `core/settings/development.py`: Local DX flags
-- `core/settings/testing.py`: Lightweight for CI
-- `core/settings/staging.py` / `production.py`: Hardened
+### Core Framework
+
+- **Python 3.10+** - Modern Python with type hints support
+- **Django 5.2+** - High-level web framework
+- **Django REST Framework 3.16+** - Powerful toolkit for building APIs
+- **PostgreSQL 15+** - Robust relational database (SQLite for development)
+
+### Key Dependencies
+
+- **djangorestframework-simplejwt** - JWT authentication
+- **drf-yasg** - Swagger/OpenAPI documentation generation
+- **django-filter** - Advanced filtering capabilities
+- **python-dotenv** - Environment variable management
+- **psycopg[binary]** - PostgreSQL adapter
+- **gunicorn** - WSGI HTTP server for production
+
+### Development & Testing
+
+- **pytest** - Modern testing framework
+- **pytest-django** - Django integration for pytest
+- **pytest-cov** - Coverage reporting
+- **uv** - Fast Python package installer and resolver
+
+### Deployment
+
+- **Docker & Docker Compose** - Containerization
+- **Nginx** - Reverse proxy and static file serving
+- **GitHub Container Registry** - Container image hosting
 
 ---
 
-## Installation (Local)
+## 📁 Project Structure
 
-1. Clone:
-   ```
+```
+ecommerce_backend/
+├── 📁 apps/                           # Django applications
+│   ├── 📁 catalog/                    # Product catalog management
+│   │   ├── models.py                  # Category & Product models
+│   │   ├── serializers.py             # API serializers
+│   │   ├── views.py                   # ViewSet implementations
+│   │   ├── permissions.py             # Custom permissions
+│   │   ├── paginations.py             # Pagination classes
+│   │   ├── urls.py                    # URL routing
+│   │   ├── 📁 tests/                  # Comprehensive test suite
+│   │   └── 📁 management/commands/    # Management commands
+│   └── 📁 users/                      # User management & authentication
+│       ├── models.py                  # Custom User model
+│       ├── serializers.py             # User serializers
+│       ├── views.py                   # Authentication views
+│       ├── urls.py                    # User-related URLs
+│       ├── 📁 tests/                  # User & auth tests
+│       └── 📁 management/commands/    # User seed commands
+├── 📁 core/                           # Project configuration
+│   ├── 📁 settings/                   # Environment-specific settings
+│   │   ├── base.py                    # Shared configuration
+│   │   ├── development.py             # Development overrides
+│   │   ├── testing.py                 # Test environment
+│   │   ├── staging.py                 # Staging environment
+│   │   ├── production.py              # Production configuration
+│   │   └── logging.py                 # Logging configuration
+│   ├── urls.py                        # Root URL configuration
+│   ├── wsgi.py                        # WSGI application
+│   ├── asgi.py                        # ASGI application
+│   └── 📁 templates/                  # HTML templates
+├── 📁 tests/                          # Global test utilities
+│   ├── constants.py                   # Test constants & fixtures
+├── 📁 docs/                           # Project documentation
+│   ├── ref_doc.md                     # Technical reference
+│   └── wiki_doc.md                    # Development wiki
+├── 📁 nginx/                          # Nginx configuration
+│   ├── nginx.conf                     # Main Nginx config
+│   └── proxy_params                   # Proxy parameters
+├── 📁 scripts/                        # Deployment scripts
+├── docker-compose.yml                  # Multi-container setup
+├── Dockerfile                          # Production image
+├── pyproject.toml                      # Modern Python project config
+├── requirements.txt                    # Development dependencies
+├── requirements-prod.txt               # Production dependencies
+├── pytest.ini                         # Testing configuration
+└── conftest.py                        # Root-level test fixtures
+```
+
+---
+
+## ⚙ Environment Configuration
+
+The project supports multiple environments through the `core/settings/` module:
+
+- **`base.py`**: Shared configuration across all environments
+- **`development.py`**: Local development with debug features
+- **`testing.py`**: Optimized for fast test execution
+- **`staging.py`**: Production-like environment for testing
+- **`production.py`**: Hardened production configuration
+
+Environment selection is controlled by the `ENVIRONMENT` variable in your `.env` file.
+
+---
+
+## 🚀 Quick Start
+
+### Option 1: Docker Compose (Recommended)
+
+1. **Clone the repository**
+
+   ```bash
    git clone git@github.com:joekariuki3/ecommerce_backend.git
    cd ecommerce_backend
    ```
-2. Create env:
+
+2. **Set up environment**
+
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
+
+3. **Launch with Docker Compose**
+
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Access the application**
+   - API: http://localhost
+   - Swagger Documentation: http://localhost/swagger/
+   - Admin Panel: http://localhost/admin/
+
+### Option 2: Local Development
+
+1. **Clone and setup virtual environment**
+
+   ```bash
+   git clone git@github.com:joekariuki3/ecommerce_backend.git
+   cd ecommerce_backend
    python3 -m venv .venv
-   source .venv/bin/activate
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
-3. Install deps:
-   ```
+
+2. **Install dependencies**
+
+   ```bash
+   # Using uv (recommended - faster)
+   pip install uv
+   uv pip install -r requirements.txt
+
+   # Or using pip
    pip install -r requirements.txt
    ```
-4. Environment variables (example `.env`):
-   - see `.env.example`
-   ```
+
+3. **Configure environment**
+
+   ```bash
    cp .env.example .env
+   # Edit .env with your database settings
    ```
-   - Edit `.env` as needed.
-5. Migrate:
-   ```
+
+4. **Database setup**
+
+   ```bash
    python manage.py migrate
+   python manage.py seed_users_db          # Optional: Create sample users
+   python manage.py seed_category_product_db  # Optional: Create sample catalog
    ```
-6. (Optional) Seed catalog:
-   ```
-   python manage.py seed_users_db
-   python manage.py seed_category_product_db
-   ```
-7. Run:
-   ```
+
+5. **Run development server**
+
+   ```bash
    python manage.py runserver
    ```
 
----
-
-## Docker Usage
-
-### Quick Start with Docker Compose (Recommended)
-
-1. Clone and navigate:
-   ```
-   git clone git@github.com:joekariuki3/ecommerce_backend.git
-   cd ecommerce_backend
-   ```
-2. Set up environment:
-   ```
-   cp .env.example .env  # Or create .env with your values
-   ```
-   Edit `.env` with production values (e.g., DB passwords, SECRET_KEY).
-3. Build and run:
-   ```
-   docker build -t ecommerce-backend:prod .
-   docker-compose up -d
-   ```
-   - App runs on `http://localhost`
-   - DB on `localhost:5432` (optional)
-
-### Manual Docker Commands
-
-- Build: `docker build -t ecommerce-backend:prod .`
-- Run: `docker run -p 80:80 --env-file .env ecommerce-backend:prod`
-- With DB: Use docker-compose for full stack.
-
-### Environment Variables
-
-Required in `.env`:
-
-- `DB_*`: Database connection details
-- `SECRET_KEY`: Django secret key
-- `ALLOWED_HOSTS`: Comma-separated domains
-- `ENVIRONMENT`: Set to `production`
+6. **Access the application**
+   - API: http://localhost:8000
+   - Swagger Documentation: http://localhost:8000/swagger/
+   - Admin Panel: http://localhost:8000/admin/
 
 ---
 
-## Management Commands
+## 🔧 Environment Variables
 
-- `seed_users_db`: Inserts sample users.
-- `seed_category_product_db`: Inserts sample categories/products.
+Create a `.env` file based on `.env.example`:
 
----
+### Required Variables
 
-## API Overview (Illustrative)
+```env
+# Environment
+ENVIRONMENT=development  # Options: development, staging, production, testing
+SECRET_KEY=your-secret-key-here
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
 
-Adjust to match actual router registrations.
+# Database
+DB_NAME=ecommerce_db
+DB_USER=postgres
+DB_PASSWORD=your-db-password
+DB_HOST=localhost  # Use 'db' for Docker Compose
+DB_PORT=5432
 
-| Area    | Endpoint (example)                            | Method           | Purpose                             |
-| ------- | --------------------------------------------- | ---------------- | ----------------------------------- |
-| Auth    | `/api/users/register/`                        | POST             | Create user                         |
-| Auth    | `/api/auth/login/`                            | POST             | Obtain token/session                |
-| Auth    | `/api/auth/logout/`                           | POST             | Invalidate token/session            |
-| Auth    | `/api/auth/refresh/`                          | POST             | Refresh token                       |
-| Auth    | `/api/auth/verify/`                           | POST             | Verify token                        |
-| Users   | `/api/users/me/`                              | GET              | Current profile                     |
-| Catalog | `/api/catalog/categories/`                    | GET/POST         | List/create categories              |
-| Catalog | `/api/catalog/categories/{id}/`               | GET/PATCH/DELETE | Category detail                     |
-| Catalog | `/api/catalog/products/`                      | GET/POST         | List/create products                |
-| Catalog | `/api/catalog/products/{id}/`                 | GET/PATCH/DELETE | Product detail                      |
-| Catalog | `/api/catalog/products/?category={id}`        | GET              | Filter products by category         |
-| Catalog | `/api/catalog/products/?search={term}`        | GET              | Search products by name/description |
-| Catalog | `/api/catalog/products/?page={n}`             | GET              | Paginated product list              |
-| Catalog | `/api/catalog/products/?limit={n}&offset={m}` | GET              | Offset-based pagination             |
-| Catalog | `/api/catalog/products/?ordering=price`       | GET              | Order by price/name                 |
-
----
-
-## Testing
-
-```
-pytest -q
+# Logging
+ENABLE_INFO_LOGS=true
+LOG_LEVEL=INFO
+DJANGO_LOG_LEVEL=INFO
+APPS_LOG_LEVEL=INFO
 ```
 
-Pytest auto-discovers under `apps/*/tests/`. Fixtures in `conftest.py`.
+### Docker Production Variables
+
+```env
+ENVIRONMENT=production
+DEBUG=False
+POSTGRES_DB=ecommerce_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=secure-password
+IMAGE_TAG=latest
+```
 
 ---
 
-## Data Model (High-Level)
+## 📚 API Documentation
 
-- Users: Custom user model it extends AbstractUser
-- Categories: Simple model with name, description
-- Products: Linked to Category (FK).
+### Interactive Documentation
+
+- **Swagger UI**: http://localhost:8000/swagger/ (development) or http://localhost/swagger/ (production)
+- **ReDoc**: http://localhost:8000/redoc/ (development) or http://localhost/redoc/ (production)
+
+### API Endpoints
+
+#### Authentication & User Management
+
+| Endpoint                   | Method           | Purpose                          | Authentication |
+| -------------------------- | ---------------- | -------------------------------- | -------------- |
+| `/api/users/register/`     | POST             | Create new user account          | None           |
+| `/api/auth/login/`         | POST             | Obtain JWT access/refresh tokens | None           |
+| `/api/auth/logout/`        | POST             | Blacklist refresh token          | Bearer Token   |
+| `/api/auth/token/refresh/` | POST             | Refresh access token             | None           |
+| `/api/auth/token/verify/`  | POST             | Verify token validity            | None           |
+| `/api/users/`              | GET              | List users (admin only)          | Bearer Token   |
+| `/api/users/{id}/`         | GET/PATCH/DELETE | User profile management          | Bearer Token   |
+
+#### Product Catalog
+
+| Endpoint                        | Method       | Purpose                             | Authentication |
+| ------------------------------- | ------------ | ----------------------------------- | -------------- |
+| `/api/catalog/categories/`      | GET          | List all categories                 | None           |
+| `/api/catalog/categories/`      | POST         | Create category (admin only)        | Bearer Token   |
+| `/api/catalog/categories/{id}/` | GET          | Category details                    | None           |
+| `/api/catalog/categories/{id}/` | PATCH/DELETE | Update/delete category (admin only) | Bearer Token   |
+| `/api/catalog/products/`        | GET          | List products with filtering/search | None           |
+| `/api/catalog/products/`        | POST         | Create product (admin only)         | Bearer Token   |
+| `/api/catalog/products/{id}/`   | GET          | Product details                     | None           |
+| `/api/catalog/products/{id}/`   | PATCH/DELETE | Update/delete product (admin only)  | Bearer Token   |
+
+#### Query Parameters for Product Listing
+
+| Parameter   | Description                             | Example           |
+| ----------- | --------------------------------------- | ----------------- |
+| `category`  | Filter by category ID                   | `?category=1`     |
+| `search`    | Search in product name/description      | `?search=laptop`  |
+| `ordering`  | Sort by field (price, name, created_at) | `?ordering=price` |
+| `page`      | Page number for pagination              | `?page=2`         |
+| `page_size` | Items per page                          | `?page_size=20`   |
+
+**Example API Calls:**
+
+```bash
+# Register new user
+curl -X POST http://localhost:8000/api/users/register/ \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "secure123", "first_name": "John", "last_name": "Doe"}'
+
+# Login and get tokens
+curl -X POST http://localhost:8000/api/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "secure123"}'
+
+# Search products
+curl "http://localhost:8000/api/catalog/products/?search=laptop&ordering=price"
+
+# Filter products by category
+curl "http://localhost:8000/api/catalog/products/?category__id=5e7ad532-b8a8-4fe7-b02d-de3426843440"
+```
 
 ---
 
-## Migrations
+## 🧪 Testing
 
-Generate when models change:
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=apps --cov=core
+
+# Run specific test file
+pytest apps/users/tests/test_user_auth.py
+
+# Run with verbose output
+pytest -v
+
+# Run tests in parallel (faster)
+pytest -n auto
+```
+
+### Test Configuration
+
+The project uses **pytest** with comprehensive configuration in `pytest.ini`:
+
+- **Coverage**: Automatically tracks code coverage for `apps/` and `core/`
+- **Django Integration**: Full Django test database and settings support
+- **Fixtures**: Shared fixtures in `conftest.py` for users, products, categories
+- **Environment**: Tests run with `ENVIRONMENT=testing` setting
+
+### Test Structure
 
 ```
+├── conftest.py                    # Global fixtures and test
+tests/
+├── constants.py                   # Test data constants
+apps/catalog/tests/
+├── test_category/                 # Category model and API tests
+└── test_product/                  # Product model and API tests
+apps/users/tests/
+├── test_user_auth.py             # Authentication flow tests
+└── test_views/                   # User management tests
+```
+
+### Available Test Fixtures
+
+- `api_client`: Unauthenticated test client
+- `default_user`: Regular user instance
+- `admin_user`: Admin user instance
+- `authenticated_client_and_user`: Client + user tuple
+- `category_factory`: Factory for creating categories
+- `product_factory`: Factory for creating products
+
+### Test Coverage
+
+Current coverage includes:
+
+- ✅ User registration and authentication flows
+- ✅ JWT token management (login/logout/refresh)
+- ✅ Product and category CRUD operations
+- ✅ API permissions and authorization
+- ✅ Filtering, sorting, and pagination
+- ✅ Search functionality
+- ✅ Error handling and validation
+
+---
+
+## 🗃 Data Models
+
+### User Model (`apps.users.User`)
+
+- Extends Django's `AbstractUser`
+- Email-based authentication (no username)
+- Standard fields: `first_name`, `last_name`, `email`, `is_staff`, `is_active`
+- Custom manager for email-based user creation
+
+### Category Model (`apps.catalog.Category`)
+
+- Simple hierarchical structure for product organization
+- Fields: `name`, `description`, `created_at`, `updated_at`
+- Used for product filtering and navigation
+
+### Product Model (`apps.catalog.Product`)
+
+- Core e-commerce product entity
+- Fields: `name`, `description`, `price`, `category` (ForeignKey), `created_at`, `updated_at`
+- Supports filtering, searching, and sorting operations
+
+---
+
+## 🛠 Management Commands
+
+### Database Seeding
+
+```bash
+# Create sample users (admin and regular users)
+python manage.py seed_users_db
+
+# Create sample categories and products
+python manage.py seed_category_product_db
+```
+
+**Note**: Seeding commands are designed for development and testing environments only.
+
+### Database Management
+
+```bash
+# Create and apply migrations
 python manage.py makemigrations
 python manage.py migrate
+
+# Create superuser
+python manage.py createsuperuser
+
+# Collect static files (production)
+python manage.py collectstatic
 ```
 
 ---
 
-## Seeding / Sample Data
+## 🐳 Docker Deployment
 
-- Use only in non-production environments.
-- Command: `python manage.py seed_users_db`
-- Command: `python manage.py seed_category_product_db`
+### Production Deployment
+
+The project includes a multi-stage Docker setup optimized for production:
+
+**Architecture**:
+
+- **Web Container**: Django app with Gunicorn + Nginx
+- **Database Container**: PostgreSQL 15
+- **Image Registry**: GitHub Container Registry (`ghcr.io/joekariuki3/ecommerce_backend`)
+
+**Deployment Steps**:
+
+1. **Configure environment**
+
+   ```bash
+   cp .env.example .env
+   # Set ENVIRONMENT=production and other production values
+   ```
+
+2. **Deploy with Docker Compose**
+
+   ```bash
+   docker compose up -d
+   ```
+
+3. **Health checks and scaling**
+
+   ```bash
+   # Check container status
+   docker compose ps
+
+   # View logs
+   docker compose logs web
+   docker compose logs db
+
+   # Scale web instances
+   docker compose up -d --scale web=3
+   ```
+
+### Container Images
+
+- **Base Image**: `python:3.11-slim`
+- **Web Server**: Nginx (reverse proxy) + Gunicorn (WSGI)
+- **Database**: PostgreSQL 15 with health checks
+- **Volumes**: Persistent PostgreSQL data storage
+
+### Production Configuration
+
+The production setup includes:
+
+- ✅ Static file serving via Nginx
+- ✅ Database connection pooling
+- ✅ Security headers and HTTPS redirect
+- ✅ Health checks for service availability
+- ✅ Automated migrations on container startup
+- ✅ Structured logging with JSON formatter
 
 ---
 
-# upcoming features:
+## 🚀 Upcoming Features
 
-- Orders & Cart service (`apps/orders`)
-- Inventory & stock reservations
-- Payment provider abstraction
-- Search (Postgres full-text / OpenSearch)
-- Caching (Redis) for catalog endpoints
-- Rate limiting (DRF throttles / nginx)
+### Phase 2: E-commerce Core
 
----
+- 🛒 **Shopping Cart**: Session and user-based cart management
+- 📦 **Order Management**: Order creation, tracking, and history
+- 💳 **Payment Integration**: Support for multiple payment providers
+- 📊 **Inventory Management**: Stock tracking and reservations
 
-## Contributing
+### Phase 3: Advanced Features
 
-1. Create feature branch: `git checkout -b feature/my_feature`
-2. Keep commits atomic (Consider Conventional Commits):
-   - `feat(catalog): add product discount field`
-3. Run tests & lint before push
-4. Open PR to `develop` branch
-5. Provide description + screenshots (if relevant)
+- 🔍 **Enhanced Search**: PostgreSQL full-text search or Elasticsearch
+- ⚡ **Caching Layer**: Redis integration for catalog and session data
+- 📈 **Analytics**: Order analytics and reporting dashboards (graphQL backend)
+- 🎯 **Recommendations**: Product recommendation engine
 
----
+### Phase 4: Scale & Performance
 
-## Deployment Checklist
-
-- `DEBUG=false`
-- Secure allowed hosts
-- Run `collectstatic` if static assets added
-- Apply migrations
-- Seed only where needed
-- Add WSGI/ASGI server (gunicorn/uvicorn) behind reverse proxy
+- 🛡 **Rate Limiting**: API throttling and abuse prevention
+- 📱 **Mobile API**: Optimized endpoints for mobile applications
+- 🌐 **Internationalization**: Multi-language and currency support
+- ☁ **Cloud Deployment**: AWS/Azure deployment configurations
 
 ---
 
-## Documentation
+## 🤝 Contributing
 
-Extra references in `docs/ref_doc.md` and `docs/wiki_doc.md`. Keep architecture notes there.
+### Development Workflow
+
+1. **Fork and clone**
+
+   ```bash
+   git clone git@github.com:your-username/ecommerce_backend.git
+   cd ecommerce_backend
+   ```
+
+2. **Create feature branch**
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Setup development environment**
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   cp .env.example .env
+   ```
+
+4. **Make changes and test**
+
+   ```bash
+   pytest --cov=apps --cov=core
+   python manage.py check
+   ```
+
+5. **Commit using Conventional Commits**
+
+   ```bash
+   git commit -m "feat(catalog): add product image upload support"
+   git commit -m "fix(auth): resolve token refresh issue"
+   git commit -m "docs(api): update authentication examples"
+   ```
+
+6. **Push and create PR**
+   ```bash
+   git push origin feature/your-feature-name
+   # Create PR targeting 'develop' branch
+   ```
+
+### Code Quality Standards
+
+- **Testing**: Maintain >90% test coverage
+- **Documentation**: Update API docs for new endpoints
+- **Type Hints**: Use Python type annotations
+- **Security**: Follow Django security best practices
+- **Performance**: Consider database query optimization
 
 ---
+
+## 📖 Additional Documentation
+
+For detailed technical information, see:
+
+- **`docs/ref_doc.md`**: Complete technical reference and requirements
+- **`docs/wiki_doc.md`**: Development wiki and architecture decisions
+- **API Documentation**: Available at `/swagger/` and `/redoc/` endpoints
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙋‍♂️ Support
+
+- **Issues**: [GitHub Issues](https://github.com/joekariuki3/ecommerce_backend/issues)
+- **Email**: joelkmuhoho@gmail.com
+
+---
+
+_Built with ❤️ using Django and Django REST Framework_
