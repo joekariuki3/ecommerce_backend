@@ -288,6 +288,13 @@ This section defines the different types of users (actors) who will interact wit
 - **As an** Administrator, **I want to** create a new product category, **so that** I can organize products effectively.
 - **As an** Administrator, **I want to** assign a product to a specific category, **so that** users can find it when browsing that category.
 - **As an** Administrator, **I want to** update or delete existing categories, **so that** I can manage the store's taxonomy.
+- **As an** Administrator, **I want to** upload a CSV file to create multiple categories at once, **so that** I can efficiently set up my product taxonomy without manual entry.
+- **As an** Administrator, **I want to** upload a CSV file to create multiple products at once, **so that** I can quickly populate my catalog with inventory data.
+- **As an** Administrator, **I want to** download product and category data as CSV files, **so that** I can backup or analyze my catalog data externally.
+- **As an** Administrator, **I want to** see the status and results of bulk operations, **so that** I can identify and fix any import errors.
+- **As an** Administrator, **I want to** upload and manage product images, **so that** customers can see visual representations of products.
+- **As an** Administrator, **I want to** set product variants (size, color, etc.), **so that** I can offer different options for the same product.
+- **As an** Administrator, **I want to** manage product inventory levels with low-stock alerts, **so that** I can maintain adequate stock levels.
 
 ### User Authentication & Profile Management
 
@@ -303,6 +310,11 @@ This section defines the different types of users (actors) who will interact wit
 - **As a** User, **I want to** sort the visible products by price, **so that** I can find items within my budget.
 - **As a** User, **I want to** sort the visible products by name or date added, **so that** I have multiple ways to organize my view.
 - **As a** User, **I want to** search for a product by its name, **so that** I can quickly find a specific item I'm looking for.
+- **As a** User, **I want to** see product availability status, **so that** I know if items are in stock before making decisions.
+- **As a** User, **I want to** search products using full-text search across name and description, **so that** I can find products more effectively.
+- **As a** User, **I want to** filter products by price range, **so that** I can find items within my budget.
+- **As a** User, **I want to** see recently viewed products, **so that** I can easily return to items I was considering.
+- **As a** User, **I want to** see recommended products based on category browsing, **so that** I can discover related items.
 
 ### API & System Quality (Developer/Admin)
 
