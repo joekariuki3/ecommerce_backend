@@ -6,6 +6,8 @@ This helps pass security checks like Bandit and makes tests more maintainable.
 import os
 from enum import Enum
 
+from django.urls import reverse
+
 
 class UserTestData(Enum):
     """Test user data constants."""
@@ -70,6 +72,31 @@ class TestAPI(Enum):
     HTTP_401_UNAUTHORIZED = 401
     HTTP_403_FORBIDDEN = 403
     HTTP_404_NOT_FOUND = 404
+
+
+class URLs(Enum):
+    """URL constants for the application."""
+
+    LANDING_PAGE = reverse("landing-page")
+
+    ADMIN_URL = reverse("admin:index")
+
+    USER_LIST = reverse("users:user-list")
+    USER_DETAIL = "/api/users/{user_id}/"
+
+    PRODUCT_LIST = reverse("catalog:product-list")
+    PRODUCT_DETAIL = "/api/catalog/products/{product_id}/"
+    PRODUCT_REMOVE_IMAGE = "/api/catalog/products/{product_id}/delete_image/"
+
+    CATEGORY_LIST = reverse("catalog:category-list")
+    CATEGORY_DETAIL = "/api/catalog/categories/{category_id}/"
+
+
+class Formats(Enum):
+    """Format constants for API requests."""
+
+    JSON = "application/json"
+    MULTIPART = "multipart"
 
 
 def get_test_user_data(user_type: str = "default") -> dict:
@@ -140,6 +167,7 @@ def get_test_product_data(index: int = 0, category=None, **overrides) -> dict:
         "name": f"{TestProducts.DEFAULT_NAME_PREFIX.value} {index + 1}",
         "description": f"{TestProducts.DEFAULT_DESCRIPTION_PREFIX.value} {index + 1}",
         "price": TestProducts.DEFAULT_BASE_PRICE.value + index,
+        "stock_quantity": 10 + index,
     }
 
     if category:
