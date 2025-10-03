@@ -192,7 +192,7 @@ def large_test_image():
 
     total_bytes = width * height * 3
 
-    # creating large amount of random bytes(data)
+    # Creating large amount of random bytes (data)
     random_bytes = os.urandom(total_bytes)
 
     image = Image.frombytes("RGB", (width, height), random_bytes)
