@@ -138,9 +138,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             )
         product.image.delete(save=True)
         logger.info(f"Image deleted for product: {product.name}")
-        return Response(
-            {"message": "Image removed successfully"}, status=status.HTTP_204_NO_CONTENT
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(
         manual_parameters=[
