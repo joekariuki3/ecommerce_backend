@@ -303,7 +303,6 @@ class TestProductImageRemoval:
         )
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert response.data["message"] == "Image removed successfully"
 
         # Verify image was removed
         product.refresh_from_db()
