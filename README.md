@@ -573,6 +573,73 @@ The production setup includes:
 
 ## 📖 Additional Documentation
 
+## 🎭 End-to-End Browser Tests (Playwright)
+
+This project uses Playwright + pytest for resilient, accessibility-aware end-to-end (E2E) tests that exercise the rendered HTML (landing page, Swagger UI, ReDoc).
+
+### Key Conventions
+
+- Tests live in `tests/e2e/` and are marked with `@pytest.mark.e2e`.
+- Default test run excludes them (`pytest.ini` sets `-m "not e2e"`).
+- Use role/text/label-based locators (`get_by_role`, `get_by_text`) instead of brittle CSS/xpaths.
+- Avoid arbitrary sleeps; rely on Playwright auto-waits + `wait_for_load_state("networkidle")` for dynamic docs (Swagger/ReDoc).
+
+### Installation (once)
+
+```bash
+uv run playwright install  # installs browser engines (Chromium by default used)
+```
+
+### Example Test (Landing Page Title)
+
+```python
+from playwright.sync_api import Page, expect
+
+def test_landing_page_has_title(page: Page):
+   page.goto("http://localhost:8000/")
+   expect(page).to_have_title("E-commerce Backend API")
+```
+
+### Running E2E Tests
+
+```bash
+# Only E2E tests (headless)
+uv run pytest -m e2e
+
+# Headed mode for debugging
+uv run pytest -m e2e --headed
+
+# Specific test
+uv run pytest -m e2e tests/e2e/test_landing_page.py::test_swagger_ui_loads
+```
+
+### What We Assert
+
+| Area         | Assertion Style                                               | Rationale                        |
+| ------------ | ------------------------------------------------------------- | -------------------------------- |
+| Landing page | Exact title & top heading                                     | Fast signal app served correctly |
+| Swagger UI   | URL regex, presence of `#swagger-ui`, title contains API name | Dynamic JS render safe           |
+| ReDoc        | URL regex, `.redoc-wrap` visible, title contains API name     | Stable container selector        |
+
+### Troubleshooting
+
+| Symptom                        | Likely Cause               | Fix                                                   |
+| ------------------------------ | -------------------------- | ----------------------------------------------------- |
+| Browser fails to launch        | Browsers not installed     | `uv run playwright install`                           |
+| Timeouts on Swagger/ReDoc      | Server slow / not running  | Ensure `python manage.py runserver` active            |
+| 403/CSRF errors (future forms) | Missing CSRF/auth handling | Add API token flow or disable CSRF for API-only views |
+| Tests hang                     | External network blocked   | Remove external calls or mock if added later          |
+
+### Adding New E2E Tests
+
+1. Identify user-facing flow (e.g., future auth UI, docs navigation).
+2. Start page interaction with `page.goto()`.
+3. Use role/text locators: `page.get_by_role("button", name="Login")`.
+4. Prefer semantic assertions (`to_have_title`, `to_have_url`, `to_have_text`).
+5. Mark test with `@pytest.mark.e2e`.
+
+---
+
 For detailed technical information, see:
 
 - **`docs/ref_doc.md`**: Complete technical reference and requirements
