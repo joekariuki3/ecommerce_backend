@@ -1,0 +1,32 @@
+name: Enforce PR Source Rules
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+
+jobs:
+  check-pr-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR source and target branches
+        run: |
+          TARGET=${{ github.event.pull_request.base.ref }}
+          SOURCE=${{ github.event.pull_request.head.ref }}
+
+          echo "Target: $TARGET"
+          echo "Source: $SOURCE"
+
+          if [ "$TARGET" = "main" ] && [ "$SOURCE" != "develop" ]; then
+            echo "❌ Only 'develop' can create PRs to 'main'."
+            exit 1
+          fi
+
+          if [ "$TARGET" = "develop" ] && [[ "$SOURCE" != feature/* ]]; then
+            echo "❌ Only 'feature/*' branches can create PRs to 'develop'."
+            exit 1
+          fi
+
+          echo "✅ PR source is valid."
