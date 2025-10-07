@@ -143,3 +143,6 @@ pyrightconfig.json
 # safety vulnerability reports
 .safety/
 .safety-project.ini
+
+# ide specific files
+.vscode/
