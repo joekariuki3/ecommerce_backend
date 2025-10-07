@@ -103,7 +103,7 @@ jobs:
           ENVIRONMENT: testing
         run: |
           python manage.py migrate --noinput
-          python manage.py runserver 0.0.0.0:8000 &
+          python manage.py runserver &
           # Wait for server to be ready
           for i in {1..30}; do
             if curl -sSf http://127.0.0.1:8000/ > /dev/null; then echo "Server up"; break; fi; sleep 1; done
@@ -116,7 +116,7 @@ jobs:
 
       - name: Upload Playwright artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts
           path: |
