@@ -80,3 +80,39 @@ def process_category_csv(file_obj):
         "error_count": error_count,
         "errors": errors,
     }
+
+
+def generate_error_csv(errors):
+    """
+    Generates a CSV string from a list of error dictionaries.
+
+    Args:
+        errors (list): A list of error objects from the bulk upload response.
+
+    Returns:
+        str: A string containing the data in CSV format.
+    """
+    output = io.StringIO()
+    fieldnames = ["name", "description", "error_details"]
+    writer = csv.DictWriter(output, fieldnames=fieldnames)
+
+    writer.writeheader()
+    for error in errors:
+        row_data = error.get("data", {})
+
+        # Flatten the validation error messages into a single readable string.
+        error_details = ": ".join(
+            [
+                f"{field}: {', '.join(msgs)}"
+                for field, msgs in error.get("errors", {}).items()
+            ]
+        )
+
+        csv_row = {
+            "name": row_data.get("name", ""),
+            "description": row_data.get("description", ""),
+            "error_details": error_details,
+        }
+        writer.writerow(csv_row)
+
+    return output.getvalue()
