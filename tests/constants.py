@@ -90,6 +90,7 @@ class URLs(Enum):
 
     CATEGORY_LIST = reverse("catalog:category-list")
     CATEGORY_DETAIL = "/api/catalog/categories/{category_id}/"
+    CATEGORY_BULK_UPLOAD_URL = reverse("catalog:category-list") + "bulk-upload/"
 
 
 class Formats(Enum):
