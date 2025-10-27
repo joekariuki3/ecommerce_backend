@@ -2,6 +2,7 @@ import logging
 from io import BytesIO
 
 from django.core.files.base import ContentFile
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -9,13 +10,14 @@ from PIL import Image
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from .models import Category, Product
 from .paginations import ProductPagination
 from .permissions import IsAdminOrReadOnly
 from .serializers import CategorySerializer, ProductSerializer
-from .services import process_category_csv
+from .services import generate_error_csv, process_category_csv
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +61,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         methods=["post"],
         url_path="bulk-upload",
         parser_classes=[MultiPartParser],
-        permission_classes=[IsAdminOrReadOnly],
+        permission_classes=[IsAdminUser],
     )
     @swagger_auto_schema(
         manual_parameters=[
@@ -152,6 +154,69 @@ class CategoryViewSet(viewsets.ModelViewSet):
         else:
             response_status = status.HTTP_200_OK
         return Response(result, status=response_status)
+
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="download-errors",
+        permission_classes=[IsAdminUser],
+    )
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "errors": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            "data": openapi.Schema(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    "name": openapi.Schema(type=openapi.TYPE_STRING),
+                                    "description": openapi.Schema(
+                                        type=openapi.TYPE_STRING
+                                    ),
+                                },
+                            ),
+                            "errors": openapi.Schema(type=openapi.TYPE_OBJECT),
+                        },
+                    ),
+                    description="The list of error objects from the bulk upload response.",
+                )
+            },
+            required=["errors"],
+        ),
+        responses={
+            200: openapi.Response(
+                "CSV file containing the rows that failed to upload.",
+                headers={
+                    "Content-Disposition": {
+                        "description": 'attachment; filename="failed_categories.csv"',
+                        "type": "string",
+                    }
+                },
+            ),
+            400: "Bad Request (e.g., missing 'errors' field).",
+        },
+    )
+    def download_errors(self, request):
+        """
+        Takes a list of errors from bulk upload and returns a CSV
+        file containing the failed rows for correction.
+        """
+        errors = request.data.get("errors")
+        if not errors or not isinstance(errors, list):
+            return Response(
+                {"error": "The 'errors' field is required and must be a list."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        csv_content = generate_error_csv(errors)
+
+        response = HttpResponse(csv_content, content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="failed_categories.csv"'
+        return response
 
 
 class ProductViewSet(viewsets.ModelViewSet):
