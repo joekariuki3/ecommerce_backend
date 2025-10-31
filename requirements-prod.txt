@@ -3,6 +3,7 @@ certifi==2025.10.5
 charset-normalizer==3.4.3
 coverage==7.10.7
 django==5.2.7
+django-cors-headers==4.9.0
 django-filter==25.1
 django-rest-framework-nested==0.0.1
 djangorestframework==3.16.1

@@ -21,5 +21,6 @@ elif ENV == "testing":
     from .testing import LOGGING as LOGGING
 else:
     # Default to development
+    from .development import CORS_ALLOW_ALL_ORIGINS as CORS_ALLOW_ALL_ORIGINS
     from .development import DEBUG as DEBUG
     from .development import LOGGING as LOGGING
